@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const isUrl = require('validator/lib/isURL');
-const { dateRegEx } = require('../utils/constants');
 
 const projectSchema = new mongoose.Schema(
   {
@@ -13,13 +12,9 @@ const projectSchema = new mongoose.Schema(
         message: 'некорректный формат ссылки на изображение для проекта',
       },
     },
-    date: {
-      type: String,
-      required: [true, 'не передана дата создания проекта'],
-      validate: {
-        validator: (date) => dateRegEx.test(date),
-        message: 'дата должна быть в формате 01.01.2023',
-      },
+    createdAt: {
+      type: Date,
+      default: Date.now,
     },
     title: {
       type: String,
