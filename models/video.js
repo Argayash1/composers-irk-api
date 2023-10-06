@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const isUrl = require('validator/lib/isURL');
 
-const audioSchema = new mongoose.Schema(
+const videoSchema = new mongoose.Schema(
   {
     composerName: {
       type: String,
@@ -31,7 +31,7 @@ const audioSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'не передана длительность произведения'],
     },
-    audioUrl: {
+    videoUrl: {
       type: String,
       required: [true, 'не передана ссылка на аудиофайл'],
       validate: {
@@ -43,4 +43,4 @@ const audioSchema = new mongoose.Schema(
   { versionKey: false },
 );
 
-module.exports = mongoose.model('news', audioSchema);
+module.exports = mongoose.model('news', videoSchema);
