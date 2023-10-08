@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const isUrl = require('validator/lib/isURL');
+import isUrl from 'validator/lib/isURL';
 
-const scoreSchema = new mongoose.Schema(
+const audioSchema = new mongoose.Schema(
   {
     composerName: {
       type: String,
@@ -22,16 +22,25 @@ const scoreSchema = new mongoose.Schema(
       minlength: [2, 'длина название произведения должна быть не менее 2 символов'],
       maxlength: [60, 'длина название произведения должна быть не более 60 символов'],
     },
+    performer: {
+      type: String,
+      required: [true, 'не передан исполнитель(и) произведения'],
+      minlength: [2, 'длина исполнителя произведения должна быть не менее 2 символов'],
+    },
+    duration: {
+      type: Number,
+      required: [true, 'не передана длительность произведения'],
+    },
     audioUrl: {
       type: String,
-      required: [true, 'не передана ссылка на файл с нотами'],
+      required: [true, 'не передана ссылка на аудиофайл'],
       validate: {
-        validator: (url) => isUrl(url, { protocols: ['http', 'https'], require_protocol: true }),
-        message: 'некорректный формат ссылки на файл с нотами',
+        validator: (url: string) => isUrl(url, { protocols: ['http', 'https'], require_protocol: true }),
+        message: 'некорректный формат ссылки на аудиофайл',
       },
     },
   },
   { versionKey: false },
 );
 
-module.exports = mongoose.model('news', scoreSchema);
+module.exports = mongoose.model('news', audioSchema);

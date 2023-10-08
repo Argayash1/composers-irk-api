@@ -1,12 +1,11 @@
-const express = require('express');
-const mongoose = require('mongoose');
+import express from 'express';
+import mongoose from 'mongoose';
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3001 } = process.env;
 
 const app = express();
 
 mongoose.connect('mongodb://127.0.0.1:27017/irkcomposersdb', {
-  useNewUrlParser: true,
 });
 
 app.listen(PORT, () => {

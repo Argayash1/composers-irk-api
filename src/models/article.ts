@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const isUrl = require('validator/lib/isURL');
+import isUrl from 'validator/lib/isURL';
 
 const articleSchema = new mongoose.Schema(
   {
@@ -8,7 +8,7 @@ const articleSchema = new mongoose.Schema(
       type: String,
       required: [true, 'не передана ссылка на изображение для статьи'],
       validate: {
-        validator: (url) => isUrl(url, { protocols: ['http', 'https'], require_protocol: true }),
+        validator: (url: string) => isUrl(url, { protocols: ['http', 'https'], require_protocol: true }),
         message: 'некорректный формат ссылки на изображение для статьи',
       },
     },
@@ -36,7 +36,7 @@ const articleSchema = new mongoose.Schema(
     sourceUrl: {
       type: String,
       validate: {
-        validator: (url) => isUrl(url, { protocols: ['http', 'https'], require_protocol: true }),
+        validator: (url: string) => isUrl(url, { protocols: ['http', 'https'], require_protocol: true }),
         message: 'некорректный формат ссылки на первоисточник статьи',
       },
     },
