@@ -8,13 +8,9 @@ const projectSchema = new mongoose.Schema(
       type: String,
       required: [true, 'не передана ссылка на изображение для проекта'],
       validate: {
-        validator: (url:string) => isUrl(url, { protocols: ['http', 'https'], require_protocol: true }),
+        validator: (url: string) => isUrl(url, { protocols: ['http', 'https'], require_protocol: true }),
         message: 'некорректный формат ссылки на изображение для проекта',
       },
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
     },
     title: {
       type: String,

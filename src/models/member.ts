@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 import isUrl from 'validator/lib/isURL';
 
-const composerSchema = new mongoose.Schema(
+const memberSchema = new mongoose.Schema(
   {
     imageUrl: {
       type: String,
@@ -12,11 +12,11 @@ const composerSchema = new mongoose.Schema(
         message: 'некорректный формат ссылки на изображение для проекта',
       },
     },
-    name: {
+    surname: {
       type: String,
-      required: [true, 'не передано имя композитора или музыковеда'],
-      minlength: [2, 'длина имени должна быть не менее 2 символов'],
-      maxlength: [30, 'длина имени должна быть не более 30 символов'],
+      required: [true, 'не передана фамилия композитора или музыковеда'],
+      minlength: [2, 'длина фамилии должна быть не менее 2 символов'],
+      maxlength: [30, 'длина фамилии должна быть не более 30 символов'],
     },
     patronymic: {
       type: String,
@@ -24,11 +24,11 @@ const composerSchema = new mongoose.Schema(
       minlength: [2, 'длина отчества должна быть не менее 2 символов'],
       maxlength: [30, 'длина отчества должна быть не более 30 символов'],
     },
-    surname: {
+    name: {
       type: String,
-      required: [true, 'не передана фамилия композитора или музыковеда'],
-      minlength: [2, 'длина фамилии должна быть не менее 2 символов'],
-      maxlength: [30, 'длина фамилии должна быть не более 30 символов'],
+      required: [true, 'не передано имя композитора или музыковеда'],
+      minlength: [2, 'длина имени должна быть не менее 2 символов'],
+      maxlength: [30, 'длина имени должна быть не более 30 символов'],
     },
     profession: {
       type: String,
@@ -42,30 +42,42 @@ const composerSchema = new mongoose.Schema(
       minlength: [2, 'длина описания проекта должна быть не менее 2 символов'],
       maxlength: [30, 'длина описания проекта должна быть не более 60 символов'],
     },
+    shortBiography: {
+      type: String,
+      required: [true, 'не передана краткая автобиография композитора или музыковеда'],
+      minlength: [2, 'длина описания проекта должна быть не менее 2 символов'],
+      maxlength: [30, 'длина описания проекта должна быть не более 60 символов'],
+    },
     works: {
       type: String,
       required: [true, 'не передан список произведений или публикаций'],
       minlength: [2, 'длина описания проекта должна быть не менее 2 символов'],
       maxlength: [30, 'длина описания проекта должна быть не более 60 символов'],
     },
-    competitions: [{
-      type: String,
-      minlength: [2, 'длина описания проекта должна быть не менее 2 символов'],
-      maxlength: [30, 'длина описания проекта должна быть не более 60 символов'],
-    }],
+    competitions: [
+      {
+        type: String,
+        minlength: [2, 'длина описания проекта должна быть не менее 2 символов'],
+        maxlength: [30, 'длина описания проекта должна быть не более 60 символов'],
+      },
+    ],
 
-    awards: [{
-      type: String,
-      minlength: [2, 'длина описания проекта должна быть не менее 2 символов'],
-      maxlength: [30, 'длина описания проекта должна быть не более 60 символов'],
-    }],
-    links: [{
-      type: String,
-      minlength: [2, 'длина описания проекта должна быть не менее 2 символов'],
-      maxlength: [30, 'длина описания проекта должна быть не более 60 символов'],
-    }],
+    awards: [
+      {
+        type: String,
+        minlength: [2, 'длина описания проекта должна быть не менее 2 символов'],
+        maxlength: [30, 'длина описания проекта должна быть не более 60 символов'],
+      },
+    ],
+    links: [
+      {
+        type: String,
+        minlength: [2, 'длина описания проекта должна быть не менее 2 символов'],
+        maxlength: [30, 'длина описания проекта должна быть не более 60 символов'],
+      },
+    ],
   },
   { versionKey: false },
 );
 
-module.exports = mongoose.model('composer', composerSchema);
+module.exports = mongoose.model('composer', memberSchema);

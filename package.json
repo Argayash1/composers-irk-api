@@ -6,6 +6,7 @@
   "scripts": {
     "start": "ts-node src/app.ts",
     "dev": "nodemon .\\dist\\app.js",
+    "inspect": "nodemon --inspect .\\dist\\app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx eslint .",
     "watch": "tsc -w"

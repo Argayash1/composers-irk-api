@@ -24,12 +24,7 @@ const audioSchema = new mongoose.Schema(
     },
     performer: {
       type: String,
-      required: [true, 'не передан исполнитель(и) произведения'],
       minlength: [2, 'длина исполнителя произведения должна быть не менее 2 символов'],
-    },
-    duration: {
-      type: Number,
-      required: [true, 'не передана длительность произведения'],
     },
     audioUrl: {
       type: String,

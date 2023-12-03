@@ -22,7 +22,7 @@ const articleSchema = new mongoose.Schema(
       minlength: [2, 'длина заголовка статьи должна быть не менее 2 символов'],
       maxlength: [30, 'длина заголовка статьи должна быть не более 60 символов'],
     },
-    description: {
+    articleDescription: {
       type: String,
       required: [true, 'не передано описание статьи'],
       minlength: [2, 'длина описания статьи должна быть не менее 2 символов'],
