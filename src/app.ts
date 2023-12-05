@@ -14,10 +14,12 @@ const app = express();
 
 const options = {
   useNewUrlParser: true,
-  useUnifiedTopology: true,
 } as mongoose.ConnectOptions;
 
 mongoose.connect('mongodb://127.0.0.1:27017/irkcomposersdb', options);
+
+// Миддлвэры для парсинга
+app.use(express.json()); // для собирания JSON-формата
 
 // Роутер
 app.use(router);
