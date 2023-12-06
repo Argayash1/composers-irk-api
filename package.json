@@ -2,11 +2,11 @@
   "name": "composers-irc-api",
   "version": "0.0.1",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "start": "ts-node src/app.ts",
-    "dev": "nodemon .\\dist\\app.js",
-    "inspect": "nodemon --inspect .\\dist\\app.js",
+    "dev": "nodemon .\\dist\\index.js",
+    "inspect": "nodemon --inspect .\\dist\\index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx eslint .",
     "watch": "tsc -w"

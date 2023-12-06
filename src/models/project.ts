@@ -1,8 +1,14 @@
-import mongoose from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 
 import isUrl from 'validator/lib/isURL';
 
-const projectSchema = new mongoose.Schema(
+interface IProject extends Document {
+  imageUrl: string;
+  title: string;
+  description: string;
+}
+
+const projectSchema = new Schema<IProject>(
   {
     imageUrl: {
       type: String,
@@ -28,4 +34,4 @@ const projectSchema = new mongoose.Schema(
   { versionKey: false },
 );
 
-module.exports = mongoose.model('project', projectSchema);
+export default model<IProject>('project', projectSchema);

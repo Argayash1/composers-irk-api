@@ -1,7 +1,7 @@
 import { Schema, model, Document } from 'mongoose';
 import isUrl from 'validator/lib/isURL';
 
-export interface INews extends Document {
+interface INews extends Document {
   imageUrl: string;
   createdAt?: Date;
   title: string;

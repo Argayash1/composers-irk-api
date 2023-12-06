@@ -14,6 +14,14 @@ const SERVER_ERROR_MESSAGE = 'На сервере произошла ошибк�
 const VALIDATION_ERROR_MESSAGE = 'Некорректные данные:';
 const NOT_FOUND_ERROR_MESSAGE = 'Ресурс не найден. Проверьте URL и метод запроса';
 
+const NEWS_NOT_FOUND_ERROR_MESSAGE = 'Такой новости нет';
+const DELETE_NEWS_MESSAGE = 'Новость удалена';
+const CAST_INCORRECT_NEWSID_ERROR_MESSAGE = 'Некорректный Id нововсти';
+
+const PROJECT_NOT_FOUND_ERROR_MESSAGE = 'Такого проекта нет';
+const DELETE_PROJECT_MESSAGE = 'Проект удалён';
+const CAST_INCORRECT_PROJECTID_ERROR_MESSAGE = 'Некорректный Id проекта';
+
 const dateRegex = /^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.\d{4}$/;
 
 export {
@@ -27,5 +35,11 @@ export {
   SERVER_ERROR_MESSAGE,
   VALIDATION_ERROR_MESSAGE,
   NOT_FOUND_ERROR_MESSAGE,
+  NEWS_NOT_FOUND_ERROR_MESSAGE,
+  DELETE_NEWS_MESSAGE,
+  CAST_INCORRECT_NEWSID_ERROR_MESSAGE,
+  PROJECT_NOT_FOUND_ERROR_MESSAGE,
+  DELETE_PROJECT_MESSAGE,
+  CAST_INCORRECT_PROJECTID_ERROR_MESSAGE,
   dateRegex,
 };
