@@ -22,6 +22,12 @@ import {
 
 const { ValidationError, CastError } = Error;
 
+interface INews {
+  imageUrl?: string;
+  title?: string;
+  newsText?: string;
+}
+
 const getNews = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const page = req.query.page ? Number(req.query.page as string) : undefined;
@@ -48,6 +54,20 @@ const getNews = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const getNewsById = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { newsId } = req.params;
+    const news = await News.findById(newsId);
+    res.send(news);
+  } catch (err) {
+    if (err instanceof CastError) {
+      next(new BadRequestError(CAST_INCORRECT_NEWSID_ERROR_MESSAGE));
+    } else {
+      next(err);
+    }
+  }
+};
+
 const createNews = async (req: Request, res: Response, next: NextFunction) => {
   const { imageUrl, createdAt, title, newsText } = req.body;
   try {
@@ -65,10 +85,54 @@ const createNews = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const updateNewsData = async (req: Request, res: Response, next: NextFunction, newsData: INews) => {
+  try {
+    const { newsId } = req.params;
+    // обновим имя найденного по _id пользователя
+    const news = await News.findByIdAndUpdate(
+      newsId,
+      newsData, // Передадим объект опций:
+      {
+        new: true, // обработчик then получит на вход обновлённую запись
+        runValidators: true, // данные будут валидированы перед изменением
+      },
+    );
+
+    if (!news) {
+      throw new NotFoundError('Такого пользователя нет');
+    }
+
+    res.send(news);
+  } catch (err) {
+    if (err instanceof ValidationError) {
+      const errorMessage = Object.values(err.errors)
+        .map((error) => error.message)
+        .join(', ');
+      next(new BadRequestError(`Некорректные данные: ${errorMessage}`));
+      return;
+    }
+    if (err instanceof CastError) {
+      next(new BadRequestError('Некорректный Id пользователя'));
+    } else {
+      next(err);
+    }
+  }
+};
+
+const updateNewsTextData = (req: Request, res: Response, next: NextFunction) => {
+  const { title, newsText } = req.body;
+  updateNewsData(req, res, next, { title, newsText });
+};
+
+const updateNewsImage = (req: Request, res: Response, next: NextFunction) => {
+  const { imageUrl } = req.body;
+  updateNewsData(req, res, next, { imageUrl });
+};
+
 // Функция, которая удаляет новость по идентификатору
 const deleteNewsById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { _id: newsId } = req.params;
+    const { newsId } = req.params;
     const news = await News.findById(newsId);
     if (!news) {
       throw new NotFoundError(NEWS_NOT_FOUND_ERROR_MESSAGE);
@@ -84,4 +148,4 @@ const deleteNewsById = async (req: Request, res: Response, next: NextFunction) =
   }
 };
 
-export { getNews, createNews, deleteNewsById };
+export { getNews, getNewsById, createNews, updateNewsTextData, updateNewsImage, deleteNewsById };

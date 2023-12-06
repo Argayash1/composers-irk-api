@@ -20,13 +20,52 @@ import {
   VALIDATION_ERROR_MESSAGE,
 } from '../utils/constants';
 
+const { ValidationError, CastError } = Error;
+
+interface IProject {
+  imageUrl?: string;
+  title?: string;
+  description?: string;
+}
+
 // Функция, которая возвращает все новости
 const getProjects = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const news = await Project.find();
-    res.send(news);
+    const page = req.query.page ? Number(req.query.page as string) : undefined;
+    const limit = req.query.limit ? Number(req.query.limit as string) : undefined;
+
+    const skip = page && limit ? (page - 1) * limit : 0;
+
+    const totalNewsCount = await Project.countDocuments();
+
+    let newsQuery = Project.find();
+
+    if (page && limit) {
+      newsQuery = newsQuery.skip(skip).limit(limit);
+    }
+
+    const projects = await newsQuery;
+
+    res.send({
+      projects,
+      totalPages: limit ? Math.ceil(totalNewsCount / limit) : undefined,
+    });
   } catch (err) {
     next(err);
+  }
+};
+
+const getProjectById = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { projectId } = req.params;
+    const news = await Project.findById(projectId);
+    res.send(news);
+  } catch (err) {
+    if (err instanceof CastError) {
+      next(new BadRequestError(CAST_INCORRECT_PROJECTID_ERROR_MESSAGE));
+    } else {
+      next(err);
+    }
   }
 };
 
@@ -36,7 +75,7 @@ const createProject = async (req: Request, res: Response, next: NextFunction) =>
     const news = await Project.create({ imageUrl, title, description });
     res.status(CREATED_201).send(news);
   } catch (err) {
-    if (err instanceof Error.ValidationError) {
+    if (err instanceof ValidationError) {
       const errorMessage = Object.values(err.errors)
         .map((error) => error.message)
         .join(', ');
@@ -47,10 +86,54 @@ const createProject = async (req: Request, res: Response, next: NextFunction) =>
   }
 };
 
-// Функция, которая удаляет новость по идентификатору
-const deleteNewsById = async (req: Request, res: Response, next: NextFunction) => {
+const updateProjectData = async (req: Request, res: Response, next: NextFunction, projectData: IProject) => {
   try {
-    const { _id: projectId } = req.params;
+    const { projectId } = req.params;
+    // обновим имя найденного по _id пользователя
+    const news = await Project.findByIdAndUpdate(
+      projectId,
+      projectData, // Передадим объект опций:
+      {
+        new: true, // обработчик then получит на вход обновлённую запись
+        runValidators: true, // данные будут валидированы перед изменением
+      },
+    );
+
+    if (!news) {
+      throw new NotFoundError('Такого пользователя нет');
+    }
+
+    res.send(news);
+  } catch (err) {
+    if (err instanceof ValidationError) {
+      const errorMessage = Object.values(err.errors)
+        .map((error) => error.message)
+        .join(', ');
+      next(new BadRequestError(`Некорректные данные: ${errorMessage}`));
+      return;
+    }
+    if (err instanceof CastError) {
+      next(new BadRequestError('Некорректный Id пользователя'));
+    } else {
+      next(err);
+    }
+  }
+};
+
+const updateProjectTextData = (req: Request, res: Response, next: NextFunction) => {
+  const { title, description } = req.body;
+  updateProjectData(req, res, next, { title, description });
+};
+
+const updateProjectImage = (req: Request, res: Response, next: NextFunction) => {
+  const { imageUrl } = req.body;
+  updateProjectData(req, res, next, { imageUrl });
+};
+
+// Функция, которая удаляет новость по идентификатору
+const deleteProjectById = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { projectId } = req.params;
     const news = await Project.findById(projectId);
     if (!news) {
       throw new NotFoundError(PROJECT_NOT_FOUND_ERROR_MESSAGE);
@@ -58,7 +141,7 @@ const deleteNewsById = async (req: Request, res: Response, next: NextFunction) =
     await Project.findByIdAndRemove(projectId);
     res.send({ message: DELETE_PROJECT_MESSAGE });
   } catch (err) {
-    if (err instanceof Error.CastError) {
+    if (err instanceof CastError) {
       next(new BadRequestError(CAST_INCORRECT_PROJECTID_ERROR_MESSAGE));
     } else {
       next(err);
@@ -66,4 +149,4 @@ const deleteNewsById = async (req: Request, res: Response, next: NextFunction) =
   }
 };
 
-export { getProjects, createProject, deleteNewsById };
+export { getProjects, getProjectById, updateProjectTextData, updateProjectImage, createProject, deleteProjectById };

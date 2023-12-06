@@ -1,13 +1,26 @@
 import { Router } from 'express'; // импортируем роутер из express
 
-import { getNews, createNews, deleteNewsById } from '../controllers/news';
+import {
+  getProjects,
+  getProjectById,
+  createProject,
+  updateProjectTextData,
+  updateProjectImage,
+  deleteProjectById,
+} from '../controllers/projects';
 
 const router = Router();
 
-router.get('/', getNews);
+router.get('/', getProjects);
 
-router.post('/', createNews);
+router.post('/', createProject);
 
-router.delete('/:_id', deleteNewsById);
+router.get('/:newsId', getProjectById);
+
+router.patch('/:projectId', updateProjectTextData);
+
+router.patch('/:projectId/image', updateProjectImage);
+
+router.delete('/:projectId', deleteProjectById);
 
 export default router;
