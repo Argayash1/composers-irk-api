@@ -1,20 +1,21 @@
-import mongoose from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 
 import isUrl from 'validator/lib/isURL';
 
-const audioSchema = new mongoose.Schema(
+interface IAudio extends Document {
+  composer: string;
+  title: string;
+  performer?: string;
+  audioUrl?: string;
+}
+
+const audioSchema = new Schema<IAudio>(
   {
-    composerName: {
+    composer: {
       type: String,
-      required: [true, 'не передано имя автора произведения'],
+      required: [true, 'не указан автор произведения'],
       minlength: [2, 'длина имени автора произведения должна быть не менее 2 символов'],
       maxlength: [30, 'длина имени автора произведения должна быть не более 30 символов'],
-    },
-    composerSurname: {
-      type: String,
-      required: [true, 'не передана фамилия автора произведения'],
-      minlength: [2, 'длина фамилии автора произведения должна быть не менее 2 символов'],
-      maxlength: [30, 'длина фамилии автора произведения должна быть не более 30 символов'],
     },
     title: {
       type: String,
@@ -38,4 +39,4 @@ const audioSchema = new mongoose.Schema(
   { versionKey: false },
 );
 
-module.exports = mongoose.model('news', audioSchema);
+export default model('audio', audioSchema);

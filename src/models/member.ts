@@ -1,8 +1,22 @@
-import mongoose from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 
 import isUrl from 'validator/lib/isURL';
 
-const memberSchema = new mongoose.Schema(
+interface IMember extends Document {
+  imageUrl: string;
+  surname: string;
+  patronymic: string;
+  name: string;
+  profession: string;
+  biography: string;
+  shortBiography: string;
+  works: string;
+  competitions?: string;
+  awards?: string;
+  links?: string;
+}
+
+const memberSchema = new Schema<IMember>(
   {
     imageUrl: {
       type: String,
@@ -80,4 +94,4 @@ const memberSchema = new mongoose.Schema(
   { versionKey: false },
 );
 
-module.exports = mongoose.model('composer', memberSchema);
+export default model<IMember>('member', memberSchema);

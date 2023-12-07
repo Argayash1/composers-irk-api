@@ -1,8 +1,17 @@
-import mongoose from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 
 import isUrl from 'validator/lib/isURL';
 
-const articleSchema = new mongoose.Schema(
+interface IArticle extends Document {
+  imageUrl: string;
+  createdAt?: Date;
+  title: string;
+  articleDescription: string;
+  articleText: string;
+  sourceUrl?: string;
+}
+
+const articleSchema = new Schema<IArticle>(
   {
     imageUrl: {
       type: String,
@@ -44,4 +53,4 @@ const articleSchema = new mongoose.Schema(
   { versionKey: false },
 );
 
-module.exports = mongoose.model('news', articleSchema);
+export default model<IArticle>('article', articleSchema);

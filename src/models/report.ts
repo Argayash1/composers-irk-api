@@ -1,8 +1,14 @@
-import mongoose from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 
 import isUrl from 'validator/lib/isURL';
 
-const reportSchema = new mongoose.Schema(
+interface IProject extends Document {
+  year: string;
+  imageUrl: string;
+  altText: string;
+}
+
+const reportSchema = new Schema(
   {
     year: {
       type: String,
@@ -24,4 +30,4 @@ const reportSchema = new mongoose.Schema(
   { versionKey: false },
 );
 
-module.exports = mongoose.model('news', reportSchema);
+export default model('report', reportSchema);
