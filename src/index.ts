@@ -4,6 +4,8 @@ import mongoose from 'mongoose';
 
 // Импорт миддлвэров
 import errorHandler from './middlwares/errorHandler';
+import limiter from './middlwares/limiter';
+import { requestLogger, errorLogger } from './middlwares/logger';
 
 // Импорт роутера
 import router from './routes/index';
@@ -18,13 +20,21 @@ const options = {
 
 mongoose.connect('mongodb://127.0.0.1:27017/irkcomposersdb', options);
 
+// Миддлвэр для логирования запросов
+app.use(requestLogger); // подключаем логгер запросов
+
+// Миддлвэры для безопасности (лимитер, хельмет и корс-обработчик)
+app.use(limiter);
+
 // Миддлвэры для парсинга
 app.use(express.json()); // для собирания JSON-формата
+app.use(express.urlencoded({ extended: true }));
 
 // Роутер
 app.use(router);
 
 // Миддлвэры для обработки ошибок
+app.use(errorLogger); // подключаем логгер ошибок
 app.use(errorHandler); // централизолванная обработка ошибок
 
 app.listen(PORT, () => {

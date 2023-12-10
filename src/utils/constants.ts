@@ -38,6 +38,14 @@ const REPORT_NOT_FOUND_ERROR_MESSAGE = 'Такого отчёта нет';
 const DELETE_REPORT_MESSAGE = 'Отчёт удален';
 const CAST_INCORRECT_REPORTID_ERROR_MESSAGE = 'Некорректный Id отчёта';
 
+const SCORE_NOT_FOUND_ERROR_MESSAGE = 'Такого отчёта нет';
+const DELETE_SCORE_MESSAGE = 'Отчёт удален';
+const CAST_INCORRECT_SCOREID_ERROR_MESSAGE = 'Некорректный Id отчёта';
+
+const VIDEO_NOT_FOUND_ERROR_MESSAGE = 'Такого видео нет';
+const DELETE_VIDEO_MESSAGE = 'Видео удалено';
+const CAST_INCORRECT_VIDEOID_ERROR_MESSAGE = 'Некорректный Id видео';
+
 const dateRegex = /^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.\d{4}$/;
 
 export {
@@ -69,5 +77,11 @@ export {
   REPORT_NOT_FOUND_ERROR_MESSAGE,
   DELETE_REPORT_MESSAGE,
   CAST_INCORRECT_REPORTID_ERROR_MESSAGE,
+  SCORE_NOT_FOUND_ERROR_MESSAGE,
+  DELETE_SCORE_MESSAGE,
+  CAST_INCORRECT_SCOREID_ERROR_MESSAGE,
+  VIDEO_NOT_FOUND_ERROR_MESSAGE,
+  DELETE_VIDEO_MESSAGE,
+  CAST_INCORRECT_VIDEOID_ERROR_MESSAGE,
   dateRegex,
 };

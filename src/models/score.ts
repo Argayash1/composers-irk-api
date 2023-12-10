@@ -1,20 +1,21 @@
-import mongoose from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 
 import isUrl from 'validator/lib/isURL';
 
-const scoreSchema = new mongoose.Schema(
+interface IScore extends Document {
+  composer: string;
+  title: string;
+  url: string;
+  category: string;
+}
+
+const scoreSchema = new Schema<IScore>(
   {
-    composerName: {
+    composer: {
       type: String,
-      required: [true, 'не передано имя автора произведения'],
+      required: [true, 'не указан автор произведения'],
       minlength: [2, 'длина имени автора произведения должна быть не менее 2 символов'],
       maxlength: [30, 'длина имени автора произведения должна быть не более 30 символов'],
-    },
-    composerSurname: {
-      type: String,
-      required: [true, 'не передана фамилия автора произведения'],
-      minlength: [2, 'длина фамилии автора произведения должна быть не менее 2 символов'],
-      maxlength: [30, 'длина фамилии автора произведения должна быть не более 30 символов'],
     },
     title: {
       type: String,
@@ -22,7 +23,7 @@ const scoreSchema = new mongoose.Schema(
       minlength: [2, 'длина название произведения должна быть не менее 2 символов'],
       maxlength: [60, 'длина название произведения должна быть не более 60 символов'],
     },
-    audioUrl: {
+    url: {
       type: String,
       required: [true, 'не передана ссылка на файл с нотами'],
       validate: {
@@ -30,8 +31,14 @@ const scoreSchema = new mongoose.Schema(
         message: 'некорректный формат ссылки на файл с нотами',
       },
     },
+    category: {
+      type: String,
+      required: [true, 'не указана категория произведения'],
+      minlength: [2, 'длина категории произведения должна быть не менее 2 символов'],
+      maxlength: [60, 'длина категории произведения должна быть не более 60 символов'],
+    },
   },
   { versionKey: false },
 );
 
-module.exports = mongoose.model('news', scoreSchema);
+export default model<IScore>('score', scoreSchema);

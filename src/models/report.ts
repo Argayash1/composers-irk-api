@@ -2,13 +2,13 @@ import { Schema, model, Document } from 'mongoose';
 
 import isUrl from 'validator/lib/isURL';
 
-interface IProject extends Document {
+interface IReport extends Document {
   year: string;
   imageUrl: string;
   altText: string;
 }
 
-const reportSchema = new Schema(
+const reportSchema = new Schema<IReport>(
   {
     year: {
       type: String,
@@ -30,4 +30,4 @@ const reportSchema = new Schema(
   { versionKey: false },
 );
 
-export default model('report', reportSchema);
+export default model<IReport>('report', reportSchema);
