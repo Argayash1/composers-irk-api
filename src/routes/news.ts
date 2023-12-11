@@ -9,18 +9,26 @@ import {
   updateNewsImage,
 } from '../controllers/news';
 
+import {
+  newsDataValidator,
+  newsIdValidator,
+  newsImageUrlValidator,
+  newsQueryParamsValidator,
+  newsTextDataValidator,
+} from '../middlwares/validators/newsValidator';
+
 const router = Router();
 
-router.get('/', getNews);
+router.get('/', newsQueryParamsValidator, getNews);
 
-router.post('/', createNews);
+router.post('/', newsDataValidator, createNews);
 
-router.get('/:newsId', getNewsById);
+router.get('/:newsId', newsIdValidator, getNewsById);
 
-router.patch('/:newsId', updateNewsTextData);
+router.patch('/:newsId', newsIdValidator, newsTextDataValidator, updateNewsTextData);
 
-router.patch('/:newsId/image', updateNewsImage);
+router.patch('/:newsId/image', newsIdValidator, newsImageUrlValidator, updateNewsImage);
 
-router.delete('/:newsId', deleteNewsById);
+router.delete('/:newsId', newsIdValidator, deleteNewsById);
 
 export default router;

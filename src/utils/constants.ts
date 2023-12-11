@@ -12,6 +12,8 @@ const {
 
 const SERVER_ERROR_MESSAGE = 'На сервере произошла ошибка';
 const VALIDATION_ERROR_MESSAGE = 'Некорректные данные:';
+const BAD_REQUEST_INCORRECT_PARAMS_ERROR_MESSAGE =
+  'Некорректный запрос. Значения параметров page и limit должны быть числом';
 const NOT_FOUND_ERROR_MESSAGE = 'Ресурс не найден. Проверьте URL и метод запроса';
 
 const NEWS_NOT_FOUND_ERROR_MESSAGE = 'Такой новости нет';
@@ -47,6 +49,7 @@ const DELETE_VIDEO_MESSAGE = 'Видео удалено';
 const CAST_INCORRECT_VIDEOID_ERROR_MESSAGE = 'Некорректный Id видео';
 
 const dateRegex = /^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.\d{4}$/;
+const urlRegEx = /https?:\/\/w{0,3}\.?[\w0-9-]{1,10}\.\w{2,3}[\w\d\-._~:/?#[\]@!$&'()*+,;=]{0,}/m;
 
 export {
   CREATED_201,
@@ -58,6 +61,7 @@ export {
   INTERNAL_SERVER_ERROR_500,
   SERVER_ERROR_MESSAGE,
   VALIDATION_ERROR_MESSAGE,
+  BAD_REQUEST_INCORRECT_PARAMS_ERROR_MESSAGE,
   NOT_FOUND_ERROR_MESSAGE,
   NEWS_NOT_FOUND_ERROR_MESSAGE,
   DELETE_NEWS_MESSAGE,
@@ -84,4 +88,5 @@ export {
   DELETE_VIDEO_MESSAGE,
   CAST_INCORRECT_VIDEOID_ERROR_MESSAGE,
   dateRegex,
+  urlRegEx,
 };

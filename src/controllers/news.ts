@@ -13,6 +13,7 @@ import News from '../models/news';
 
 // Импорт статус-кодов ошибок
 import {
+  BAD_REQUEST_INCORRECT_PARAMS_ERROR_MESSAGE,
   CAST_INCORRECT_NEWSID_ERROR_MESSAGE,
   CREATED_201,
   DELETE_NEWS_MESSAGE,
@@ -32,6 +33,10 @@ const getNews = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const page = req.query.page ? Number(req.query.page as string) : undefined;
     const limit = req.query.limit ? Number(req.query.limit as string) : undefined;
+
+    if (Number.isNaN(page) || Number.isNaN(limit)) {
+      throw new BadRequestError(BAD_REQUEST_INCORRECT_PARAMS_ERROR_MESSAGE);
+    }
 
     const skip = page && limit ? (page - 1) * limit : 0;
 

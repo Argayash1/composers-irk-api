@@ -3,6 +3,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 
 // Импорт миддлвэров
+import { errors } from 'celebrate';
 import errorHandler from './middlwares/errorHandler';
 import limiter from './middlwares/limiter';
 import { requestLogger, errorLogger } from './middlwares/logger';
@@ -35,6 +36,7 @@ app.use(router);
 
 // Миддлвэры для обработки ошибок
 app.use(errorLogger); // подключаем логгер ошибок
+app.use(errors()); // обработчик ошибок celebrate
 app.use(errorHandler); // централизолванная обработка ошибок
 
 app.listen(PORT, () => {
