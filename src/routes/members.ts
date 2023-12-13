@@ -10,20 +10,29 @@ import {
   deleteUnionMemberById,
 } from '../controllers/members';
 
+import {
+  memberDataValidator,
+  memberQueryParamsValidator,
+  memberProfileDataValidator,
+  memberAboutDataValidator,
+  memberImageUrlValidator,
+  memberIdValidator,
+} from '../middlwares/validators/memberValidator';
+
 const router = Router();
 
-router.get('/', getUnionMembers);
+router.get('/', memberQueryParamsValidator, getUnionMembers);
 
-router.post('/', createUnionMember);
+router.post('/', memberDataValidator, createUnionMember);
 
-router.get('/memberId', getUnionMemberById);
+router.get('/memberId', memberIdValidator, getUnionMemberById);
 
-router.patch('/:memberId', updateUnionMemberProfile);
+router.patch('/:memberId', memberIdValidator, memberProfileDataValidator, updateUnionMemberProfile);
 
-router.patch('/:memberId/about', updateUnionMemberAbout);
+router.patch('/:memberId/about', memberIdValidator, memberAboutDataValidator, updateUnionMemberAbout);
 
-router.patch('/:memberId/image', updateUnionMemberImage);
+router.patch('/:memberId/image', memberIdValidator, memberImageUrlValidator, updateUnionMemberImage);
 
-router.delete('/:memberId', deleteUnionMemberById);
+router.delete('/:memberId', memberIdValidator, deleteUnionMemberById);
 
 export default router;

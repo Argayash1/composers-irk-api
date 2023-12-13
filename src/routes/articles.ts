@@ -9,18 +9,26 @@ import {
   deleteArticleById,
 } from '../controllers/articles';
 
+import {
+  articleDataValidator,
+  articleQueryParamsValidator,
+  articleTextDataValidator,
+  articleImageUrlValidator,
+  articleIdValidator,
+} from '../middlwares/validators/articleValidator';
+
 const router = Router();
 
-router.get('/', getArticles);
+router.get('/', articleQueryParamsValidator, getArticles);
 
-router.post('/', createArticle);
+router.post('/', articleDataValidator, createArticle);
 
-router.get('/:articleId', getArticleById);
+router.get('/:articleId', articleIdValidator, getArticleById);
 
-router.patch('/:articleId', updateArticleTextData);
+router.patch('/:articleId', articleIdValidator, articleTextDataValidator, updateArticleTextData);
 
-router.patch('/:articleId/image', updateArticleImage);
+router.patch('/:articleId/image', articleIdValidator, articleImageUrlValidator, updateArticleImage);
 
-router.delete('/:articleId', deleteArticleById);
+router.delete('/:articleId', articleIdValidator, deleteArticleById);
 
 export default router;

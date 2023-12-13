@@ -25,31 +25,15 @@ const { ValidationError, CastError } = Error;
 interface IAudio {
   composer?: string;
   title?: string;
-  performer?: string;
-  audioUrl?: string;
+  category?: string;
+  url?: string;
 }
 
 const getScores = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const page = req.query.page ? Number(req.query.page as string) : undefined;
-    const limit = req.query.limit ? Number(req.query.limit as string) : undefined;
+    const scores = await Score.find({});
 
-    const skip = page && limit ? (page - 1) * limit : 0;
-
-    const totalNewsCount = await Score.countDocuments();
-
-    let newsQuery = Score.find();
-
-    if (page && limit) {
-      newsQuery = newsQuery.skip(skip).limit(limit);
-    }
-
-    const scores = await newsQuery;
-
-    res.send({
-      scores,
-      totalPages: limit ? Math.ceil(totalNewsCount / limit) : undefined,
-    });
+    res.send(scores);
   } catch (err) {
     next(err);
   }
@@ -107,13 +91,13 @@ const updateScoreData = async (req: Request, res: Response, next: NextFunction, 
 };
 
 const updateScoreTextData = (req: Request, res: Response, next: NextFunction) => {
-  const { title, composer, performer } = req.body;
-  updateScoreData(req, res, next, { title, composer, performer });
+  const { title, composer, category } = req.body;
+  updateScoreData(req, res, next, { title, composer, category });
 };
 
 const updateScoreUrl = (req: Request, res: Response, next: NextFunction) => {
-  const { audioUrl } = req.body;
-  updateScoreData(req, res, next, { audioUrl });
+  const { url } = req.body;
+  updateScoreData(req, res, next, { url });
 };
 
 // Функция, которая удаляет новость по идентификатору

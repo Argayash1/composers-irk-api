@@ -91,7 +91,7 @@ const updateArticleData = async (req: Request, res: Response, next: NextFunction
   try {
     const { articleId } = req.params;
     // обновим имя найденного по _id пользователя
-    const news = await Article.findByIdAndUpdate(
+    const article = await Article.findByIdAndUpdate(
       articleId,
       newsData, // Передадим объект опций:
       {
@@ -100,11 +100,11 @@ const updateArticleData = async (req: Request, res: Response, next: NextFunction
       },
     );
 
-    if (!news) {
+    if (!article) {
       throw new NotFoundError('Такого пользователя нет');
     }
 
-    res.send(news);
+    res.send(article);
   } catch (err) {
     if (err instanceof ValidationError) {
       const errorMessage = Object.values(err.errors)
@@ -135,8 +135,8 @@ const updateArticleImage = (req: Request, res: Response, next: NextFunction) => 
 const deleteArticleById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { articleId } = req.params;
-    const news = await Article.findById(articleId);
-    if (!news) {
+    const article = await Article.findById(articleId);
+    if (!article) {
       throw new NotFoundError(ARTICLE_NOT_FOUND_ERROR_MESSAGE);
     }
     await Article.findByIdAndRemove(articleId);

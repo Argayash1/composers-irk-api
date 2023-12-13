@@ -9,18 +9,26 @@ import {
   deleteProjectById,
 } from '../controllers/projects';
 
+import {
+  projectDataValidator,
+  projectQueryParamsValidator,
+  projectTextDataValidator,
+  projectImageUrlValidator,
+  projectIdValidator,
+} from '../middlwares/validators/projectValidator';
+
 const router = Router();
 
-router.get('/', getProjects);
+router.get('/', projectQueryParamsValidator, getProjects);
 
-router.post('/', createProject);
+router.post('/', projectDataValidator, createProject);
 
-router.get('/:newsId', getProjectById);
+router.get('/:newsId', projectIdValidator, getProjectById);
 
-router.patch('/:projectId', updateProjectTextData);
+router.patch('/:projectId', projectIdValidator, projectTextDataValidator, updateProjectTextData);
 
-router.patch('/:projectId/image', updateProjectImage);
+router.patch('/:projectId/image', projectIdValidator, projectImageUrlValidator, updateProjectImage);
 
-router.delete('/:projectId', deleteProjectById);
+router.delete('/:projectId', projectIdValidator, deleteProjectById);
 
 export default router;

@@ -9,18 +9,26 @@ import {
   deleteVideoById,
 } from '../controllers/videos';
 
+import {
+  videoDataValidator,
+  videoQueryParamsValidator,
+  videoTextDataValidator,
+  videoImageUrlValidator,
+  videoIdValidator,
+} from '../middlwares/validators/videoValidator';
+
 const router = Router();
 
-router.get('/', getVideos);
+router.get('/', videoQueryParamsValidator, getVideos);
 
-router.post('/', createVideo);
+router.post('/', videoDataValidator, createVideo);
 
-router.get('/:videoId', getVideoById);
+router.get('/:videoId', videoIdValidator, getVideoById);
 
-router.patch('/:videoId', updateVideoTextData);
+router.patch('/:videoId', videoIdValidator, videoTextDataValidator, updateVideoTextData);
 
-router.patch('/:videoId/link', updateVideoUrl);
+router.patch('/:videoId/link', videoIdValidator, videoImageUrlValidator, updateVideoUrl);
 
-router.delete('/:videoId', deleteVideoById);
+router.delete('/:videoId', videoIdValidator, deleteVideoById);
 
 export default router;

@@ -30,25 +30,9 @@ interface IReport {
 
 const getReports = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const page = req.query.page ? Number(req.query.page as string) : undefined;
-    const limit = req.query.limit ? Number(req.query.limit as string) : undefined;
+    const reports = await Report.find({});
 
-    const skip = page && limit ? (page - 1) * limit : 0;
-
-    const totalNewsCount = await Report.countDocuments();
-
-    let newsQuery = Report.find();
-
-    if (page && limit) {
-      newsQuery = newsQuery.skip(skip).limit(limit);
-    }
-
-    const reports = await newsQuery;
-
-    res.send({
-      reports,
-      totalPages: limit ? Math.ceil(totalNewsCount / limit) : undefined,
-    });
+    res.send(reports);
   } catch (err) {
     next(err);
   }

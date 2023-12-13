@@ -1,0 +1,71 @@
+import { celebrate, Joi } from 'celebrate';
+import { urlRegEx } from '../../utils/constants';
+
+const memberDataValidator = celebrate({
+  // валидируем тело запроса
+  body: Joi.object().keys({
+    imageUrl: Joi.string().required(),
+    surname: Joi.string().required().min(2).max(30),
+    patronymic: Joi.string().required().min(2).max(30),
+    name: Joi.string().required().min(2).max(30),
+    profession: Joi.string().required().min(2).max(30),
+    biography: Joi.string().required().min(2).max(30),
+    shortBiography: Joi.string().required().min(2).max(30),
+    works: Joi.string().required().min(2).max(30),
+    competitions: Joi.string().required().min(2).max(30),
+    awards: Joi.string().required().min(2).max(30),
+    links: Joi.string().required().min(2).max(30),
+  }),
+});
+
+const memberQueryParamsValidator = celebrate({
+  query: Joi.object().keys({
+    page: Joi.number().integer().min(1),
+    limit: Joi.number().integer().min(1).max(100),
+  }),
+});
+
+const memberProfileDataValidator = celebrate({
+  // валидируем тело запроса
+  body: Joi.object().keys({
+    surname: Joi.string().required().min(2).max(30),
+    patronymic: Joi.string().required().min(2).max(30),
+    name: Joi.string().required().min(2).max(30),
+    profession: Joi.string().required().min(2).max(30),
+  }),
+});
+
+const memberAboutDataValidator = celebrate({
+  // валидируем тело запроса
+  body: Joi.object().keys({
+    biography: Joi.string().required().min(2).max(30),
+    shortBiography: Joi.string().required().min(2).max(30),
+    works: Joi.string().required().min(2).max(30),
+    competitions: Joi.string().required().min(2).max(30),
+    awards: Joi.string().required().min(2).max(30),
+    links: Joi.string().required().min(2).max(30),
+  }),
+});
+
+const memberImageUrlValidator = celebrate({
+  // валидируем тело запроса
+  body: Joi.object().keys({
+    imageUrl: Joi.string().required(),
+  }),
+});
+
+const memberIdValidator = celebrate({
+  // валидируем параметры
+  params: Joi.object().keys({
+    memberId: Joi.string().hex().length(24).required(),
+  }),
+});
+
+export {
+  memberDataValidator,
+  memberQueryParamsValidator,
+  memberProfileDataValidator,
+  memberAboutDataValidator,
+  memberImageUrlValidator,
+  memberIdValidator,
+};

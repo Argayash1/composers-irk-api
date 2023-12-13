@@ -38,13 +38,13 @@ const getVideos = async (req: Request, res: Response, next: NextFunction) => {
 
     const totalNewsCount = await Video.countDocuments();
 
-    let newsQuery = Video.find();
+    let videosQuery = Video.find();
 
     if (page && limit) {
-      newsQuery = newsQuery.skip(skip).limit(limit);
+      videosQuery = videosQuery.skip(skip).limit(limit);
     }
 
-    const videos = await newsQuery;
+    const videos = await videosQuery;
 
     res.send({
       videos,
@@ -70,9 +70,9 @@ const getVideoById = async (req: Request, res: Response, next: NextFunction) => 
 };
 
 const createVideo = async (req: Request, res: Response, next: NextFunction) => {
-  const { imageUrl, createdAt, title, newsText } = req.body;
+  const { composer, title, performer, iframeUrl } = req.body;
   try {
-    const video = await Video.create({ imageUrl, createdAt, title, newsText });
+    const video = await Video.create({ composer, title, performer, iframeUrl });
     res.status(CREATED_201).send(video);
   } catch (err) {
     if (err instanceof ValidationError) {

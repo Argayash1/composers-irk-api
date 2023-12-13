@@ -31,25 +31,8 @@ interface IAudio {
 
 const getAudios = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const page = req.query.page ? Number(req.query.page as string) : undefined;
-    const limit = req.query.limit ? Number(req.query.limit as string) : undefined;
-
-    const skip = page && limit ? (page - 1) * limit : 0;
-
-    const totalNewsCount = await Audio.countDocuments();
-
-    let newsQuery = Audio.find();
-
-    if (page && limit) {
-      newsQuery = newsQuery.skip(skip).limit(limit);
-    }
-
-    const audios = await newsQuery;
-
-    res.send({
-      audios,
-      totalPages: limit ? Math.ceil(totalNewsCount / limit) : undefined,
-    });
+    const audios = await Audio.find({});
+    res.send(audios);
   } catch (err) {
     next(err);
   }
@@ -58,8 +41,8 @@ const getAudios = async (req: Request, res: Response, next: NextFunction) => {
 const createAudio = async (req: Request, res: Response, next: NextFunction) => {
   const { composer, title, performer, audioUrl } = req.body;
   try {
-    const news = await Audio.create({ composer, title, performer, audioUrl });
-    res.status(CREATED_201).send(news);
+    const audio = await Audio.create({ composer, title, performer, audioUrl });
+    res.status(CREATED_201).send(audio);
   } catch (err) {
     if (err instanceof ValidationError) {
       const errorMessage = Object.values(err.errors)

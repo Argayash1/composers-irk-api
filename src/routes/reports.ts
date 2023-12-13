@@ -8,16 +8,23 @@ import {
   deleteReportById,
 } from '../controllers/reports';
 
+import {
+  reportDataValidator,
+  reportTextDataValidator,
+  reportImageUrlValidator,
+  reportIdValidator,
+} from '../middlwares/validators/reportValidator';
+
 const router = Router();
 
 router.get('/', getReports);
 
-router.post('/', createReport);
+router.post('/', reportDataValidator, createReport);
 
-router.patch('/:reportId', updateReportTextData);
+router.patch('/:reportId', reportIdValidator, reportTextDataValidator, updateReportTextData);
 
-router.patch('/:reportId/image', updateReportImage);
+router.patch('/:reportId/image', reportIdValidator, reportImageUrlValidator, updateReportImage);
 
-router.delete('/:reportId', deleteReportById);
+router.delete('/:reportId', reportIdValidator, deleteReportById);
 
 export default router;
