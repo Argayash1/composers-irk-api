@@ -5,7 +5,7 @@ const newsDataValidator = celebrate({
   // валидируем тело запроса
   body: Joi.object().keys({
     imageUrl: Joi.string().required(),
-    title: Joi.string().required().min(2).max(30),
+    title: Joi.string().required().min(2).max(60),
     newsText: Joi.string().required().min(2),
   }),
 });
@@ -20,7 +20,7 @@ const newsQueryParamsValidator = celebrate({
 const newsTextDataValidator = celebrate({
   // валидируем тело запроса
   body: Joi.object().keys({
-    title: Joi.string().required().min(2).max(30),
+    title: Joi.string().required().min(2).max(60),
     newsText: Joi.string().required().min(2),
   }),
 });

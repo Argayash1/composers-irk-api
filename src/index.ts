@@ -11,6 +11,7 @@ import { requestLogger, errorLogger } from './middlwares/logger';
 // Импорт роутера
 import router from './routes/index';
 import helmet from 'helmet';
+import corsHandler from './middlwares/corsHandler';
 
 const { PORT = 3001 } = process.env;
 
@@ -28,6 +29,7 @@ app.use(requestLogger); // подключаем логгер запросов
 // Миддлвэры для безопасности (лимитер, хельмет и корс-обработчик)
 app.use(limiter);
 app.use(helmet());
+app.use(corsHandler);
 
 // Миддлвэры для парсинга
 app.use(express.json()); // для собирания JSON-формата
