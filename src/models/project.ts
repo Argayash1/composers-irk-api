@@ -28,7 +28,6 @@ const projectSchema = new Schema<IProject>(
       type: String,
       required: [true, 'не передано описание проекта'],
       minlength: [2, 'длина описания проекта должна быть не менее 2 символов'],
-      maxlength: [30, 'длина описания проекта должна быть не более 60 символов'],
     },
   },
   { versionKey: false },

@@ -23,7 +23,7 @@ router.get('/', projectQueryParamsValidator, getProjects);
 
 router.post('/', projectDataValidator, createProject);
 
-router.get('/:newsId', projectIdValidator, getProjectById);
+router.get('/:projectId', projectIdValidator, getProjectById);
 
 router.patch('/:projectId', projectIdValidator, projectTextDataValidator, updateProjectTextData);
 
