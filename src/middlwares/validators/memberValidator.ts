@@ -9,12 +9,12 @@ const memberDataValidator = celebrate({
     patronymic: Joi.string().required().min(2).max(30),
     name: Joi.string().required().min(2).max(30),
     profession: Joi.string().required().min(2).max(30),
-    biography: Joi.string().required().min(2).max(30),
-    shortBiography: Joi.string().required().min(2).max(30),
-    works: Joi.string().required().min(2).max(30),
-    competitions: Joi.string().required().min(2).max(30),
-    awards: Joi.string().required().min(2).max(30),
-    links: Joi.string().required().min(2).max(30),
+    biography: Joi.string().required().min(2),
+    shortBiography: Joi.string().required().min(2),
+    works: Joi.string().required().min(2),
+    competitions: Joi.string().min(2),
+    awards: Joi.string().min(2),
+    links: Joi.string().min(2),
   }),
 });
 

@@ -46,13 +46,13 @@ const getUnionMembers = async (req: Request, res: Response, next: NextFunction) 
 
     const totalNewsCount = await Member.countDocuments();
 
-    let newsQuery = Member.find();
+    let membersQuery = Member.find();
 
     if (page && limit) {
-      newsQuery = newsQuery.skip(skip).limit(limit);
+      membersQuery = membersQuery.skip(skip).limit(limit);
     }
 
-    const members = await newsQuery;
+    const members = await membersQuery;
 
     res.send({
       members,

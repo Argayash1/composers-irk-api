@@ -25,7 +25,7 @@ router.get('/', memberQueryParamsValidator, getUnionMembers);
 
 router.post('/', memberDataValidator, createUnionMember);
 
-router.get('/memberId', memberIdValidator, getUnionMemberById);
+router.get('/:memberId', memberIdValidator, getUnionMemberById);
 
 router.patch('/:memberId', memberIdValidator, memberProfileDataValidator, updateUnionMemberProfile);
 
