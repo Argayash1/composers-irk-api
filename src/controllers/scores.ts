@@ -31,7 +31,14 @@ interface IAudio {
 
 const getScores = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const scores = await Score.find({});
+    const category = req.query.category || null;
+    let query = {};
+
+    if (category) {
+      query = { category: category };
+    }
+
+    const scores = await Score.find(query);
 
     res.send(scores);
   } catch (err) {
@@ -40,9 +47,9 @@ const getScores = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const createScore = async (req: Request, res: Response, next: NextFunction) => {
-  const { composer, title, performer, audioUrl } = req.body;
+  const { composer, title, category, url } = req.body;
   try {
-    const news = await Score.create({ composer, title, performer, audioUrl });
+    const news = await Score.create({ composer, title, category, url });
     res.status(CREATED_201).send(news);
   } catch (err) {
     if (err instanceof ValidationError) {

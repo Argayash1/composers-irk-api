@@ -6,7 +6,7 @@ interface IScore extends Document {
   composer: string;
   title: string;
   url: string;
-  category: string;
+  category: number;
 }
 
 const scoreSchema = new Schema<IScore>(
@@ -32,10 +32,9 @@ const scoreSchema = new Schema<IScore>(
       },
     },
     category: {
-      type: String,
+      type: Number,
       required: [true, 'не указана категория произведения'],
-      minlength: [2, 'длина категории произведения должна быть не менее 2 символов'],
-      maxlength: [60, 'длина категории произведения должна быть не более 60 символов'],
+      maxlength: [10, 'длина категории произведения должна быть не более 10 символов'],
     },
   },
   { versionKey: false },
