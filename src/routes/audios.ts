@@ -14,10 +14,10 @@ router.get('/', getAudios);
 
 router.post('/', audioDataValidator, createAudio);
 
-router.patch('/:audioiId', audioIdValidator, audioTextDataValidator, updateAudioTextData);
+router.patch('/:audioId', audioIdValidator, audioTextDataValidator, updateAudioTextData);
 
-router.patch('/:audioiId/link', audioIdValidator, audioUrlValidator, updateAudioUrl);
+router.patch('/:audioId/link', audioIdValidator, audioUrlValidator, updateAudioUrl);
 
-router.delete('/:audioiId', audioIdValidator, deleteAudioById);
+router.delete('/:audioId', audioIdValidator, deleteAudioById);
 
 export default router;

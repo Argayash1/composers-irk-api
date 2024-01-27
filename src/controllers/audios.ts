@@ -102,12 +102,12 @@ const updateAudioUrl = (req: Request, res: Response, next: NextFunction) => {
 // Функция, которая удаляет новость по идентификатору
 const deleteAudioById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { audioiId } = req.params;
-    const audio = await Audio.findById(audioiId);
+    const { audioId } = req.params;
+    const audio = await Audio.findById(audioId);
     if (!audio) {
       throw new NotFoundError(AUDIO_NOT_FOUND_ERROR_MESSAGE);
     }
-    await Audio.findByIdAndRemove(audioiId);
+    await Audio.findByIdAndRemove(audioId);
     res.send({ message: DELETE_AUDIO_MESSAGE });
   } catch (err) {
     if (err instanceof CastError) {

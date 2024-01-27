@@ -5,8 +5,8 @@ const videoDataValidator = celebrate({
   // валидируем тело запроса
   body: Joi.object().keys({
     composer: Joi.string().required().min(2).max(30),
-    title: Joi.string().required().min(2).max(30),
-    performer: Joi.string().required().min(2).max(30),
+    title: Joi.string().required().min(2).max(100),
+    performer: Joi.string().min(2).max(30),
     iframeUrl: Joi.string().required(),
   }),
 });
@@ -22,8 +22,8 @@ const videoTextDataValidator = celebrate({
   // валидируем тело запроса
   body: Joi.object().keys({
     composer: Joi.string().required().min(2).max(30),
-    title: Joi.string().required().min(2).max(30),
-    performer: Joi.string().required().min(2).max(30),
+    title: Joi.string().required().min(2).max(100),
+    performer: Joi.string().min(2).max(30),
   }),
 });
 
