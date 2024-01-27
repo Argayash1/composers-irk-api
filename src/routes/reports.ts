@@ -6,6 +6,7 @@ import {
   updateReportTextData,
   updateReportImage,
   deleteReportById,
+  getReportByIndex,
 } from '../controllers/reports';
 
 import {
@@ -13,6 +14,7 @@ import {
   reportTextDataValidator,
   reportImageUrlValidator,
   reportIdValidator,
+  reportIndexValidator,
 } from '../middlwares/validators/reportValidator';
 
 const router = Router();
@@ -20,6 +22,8 @@ const router = Router();
 router.get('/', getReports);
 
 router.post('/', reportDataValidator, createReport);
+
+router.get('/:reportIndex', reportIndexValidator, getReportByIndex);
 
 router.patch('/:reportId', reportIdValidator, reportTextDataValidator, updateReportTextData);
 

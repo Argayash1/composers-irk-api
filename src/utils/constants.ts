@@ -39,6 +39,7 @@ const CAST_INCORRECT_MEMBERID_ERROR_MESSAGE = 'Некорректный Id чл�
 const REPORT_NOT_FOUND_ERROR_MESSAGE = 'Такого отчёта нет';
 const DELETE_REPORT_MESSAGE = 'Отчёт удален';
 const CAST_INCORRECT_REPORTID_ERROR_MESSAGE = 'Некорректный Id отчёта';
+const BAD_REUEST_INCORRECT_REPORTINDEX_ERROR_MESSAGE = 'Недопустимый индекс отчёта';
 
 const SCORE_NOT_FOUND_ERROR_MESSAGE = 'Такого отчёта нет';
 const DELETE_SCORE_MESSAGE = 'Отчёт удален';
@@ -81,6 +82,7 @@ export {
   REPORT_NOT_FOUND_ERROR_MESSAGE,
   DELETE_REPORT_MESSAGE,
   CAST_INCORRECT_REPORTID_ERROR_MESSAGE,
+  BAD_REUEST_INCORRECT_REPORTINDEX_ERROR_MESSAGE,
   SCORE_NOT_FOUND_ERROR_MESSAGE,
   DELETE_SCORE_MESSAGE,
   CAST_INCORRECT_SCOREID_ERROR_MESSAGE,

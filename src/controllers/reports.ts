@@ -13,6 +13,7 @@ import Report from '../models/report';
 
 // Импорт статус-кодов ошибок
 import {
+  BAD_REUEST_INCORRECT_REPORTINDEX_ERROR_MESSAGE,
   CAST_INCORRECT_REPORTID_ERROR_MESSAGE,
   CREATED_201,
   DELETE_REPORT_MESSAGE,
@@ -38,10 +39,28 @@ const getReports = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const createReport = async (req: Request, res: Response, next: NextFunction) => {
-  const { year, imageUrl, altText } = req.body;
+const getReportByIndex = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const report = await Report.create({ year, imageUrl, altText });
+    const reports = await Report.find({});
+    const reportIndex = parseInt(req.params.reportIndex); // Извлечение reportIndex из URL-адреса и преобразование в число
+
+    if (isNaN(reportIndex) || reportIndex >= reports.length) {
+      // Проверка валидности reportIndex
+      throw new BadRequestError(BAD_REUEST_INCORRECT_REPORTINDEX_ERROR_MESSAGE);
+    }
+
+    const report = reports[reportIndex]; // Получение отчёта из массива по индексу
+
+    res.send(report);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const createReport = async (req: Request, res: Response, next: NextFunction) => {
+  const { year, imageUrl } = req.body;
+  try {
+    const report = await Report.create({ year, imageUrl });
     res.status(CREATED_201).send(report);
   } catch (err) {
     if (err instanceof ValidationError) {
@@ -55,7 +74,7 @@ const createReport = async (req: Request, res: Response, next: NextFunction) => 
   }
 };
 
-const updateAudioData = async (req: Request, res: Response, next: NextFunction, newsData: IReport) => {
+const updateReportData = async (req: Request, res: Response, next: NextFunction, newsData: IReport) => {
   try {
     const { reportId } = req.params;
     // обновим имя найденного по _id пользователя
@@ -90,13 +109,13 @@ const updateAudioData = async (req: Request, res: Response, next: NextFunction, 
 };
 
 const updateReportTextData = (req: Request, res: Response, next: NextFunction) => {
-  const { year, imageUrl, altText } = req.body;
-  updateAudioData(req, res, next, { year, imageUrl, altText });
+  const { year } = req.body;
+  updateReportData(req, res, next, { year });
 };
 
 const updateReportImage = (req: Request, res: Response, next: NextFunction) => {
   const { imageUrl } = req.body;
-  updateAudioData(req, res, next, { imageUrl });
+  updateReportData(req, res, next, { imageUrl });
 };
 
 // Функция, которая удаляет новость по идентификатору
@@ -118,4 +137,4 @@ const deleteReportById = async (req: Request, res: Response, next: NextFunction)
   }
 };
 
-export { getReports, createReport, updateReportTextData, updateReportImage, deleteReportById };
+export { getReports, getReportByIndex, createReport, updateReportTextData, updateReportImage, deleteReportById };

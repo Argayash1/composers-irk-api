@@ -6,15 +6,13 @@ const reportDataValidator = celebrate({
   body: Joi.object().keys({
     year: Joi.string().required().min(2).max(30),
     imageUrl: Joi.string().required(),
-    altText: Joi.string().required().min(2).max(30),
   }),
 });
 
 const reportTextDataValidator = celebrate({
   // валидируем тело запроса
   body: Joi.object().keys({
-    title: Joi.string().required().min(2).max(30),
-    altText: Joi.string().required().min(2).max(30),
+    year: Joi.string().required().min(2).max(30),
   }),
 });
 
@@ -32,4 +30,17 @@ const reportIdValidator = celebrate({
   }),
 });
 
-export { reportDataValidator, reportTextDataValidator, reportImageUrlValidator, reportIdValidator };
+const reportIndexValidator = celebrate({
+  // валидируем параметры
+  params: Joi.object().keys({
+    reportIndex: Joi.string().max(2).required(),
+  }),
+});
+
+export {
+  reportDataValidator,
+  reportTextDataValidator,
+  reportImageUrlValidator,
+  reportIdValidator,
+  reportIndexValidator,
+};
