@@ -71,9 +71,9 @@ const getArticleById = async (req: Request, res: Response, next: NextFunction) =
 };
 
 const createArticle = async (req: Request, res: Response, next: NextFunction) => {
-  const { imageUrl, createdAt, title, newsText } = req.body;
+  const { imageUrl, createdAt, title, articleText, articleDescription, sourceUrl } = req.body;
   try {
-    const news = await Article.create({ imageUrl, createdAt, title, newsText });
+    const news = await Article.create({ imageUrl, createdAt, title, articleText, articleDescription, sourceUrl });
     res.status(CREATED_201).send(news);
   } catch (err) {
     if (err instanceof ValidationError) {

@@ -5,7 +5,7 @@ const articleDataValidator = celebrate({
   // валидируем тело запроса
   body: Joi.object().keys({
     imageUrl: Joi.string().required(),
-    title: Joi.string().required().min(2).max(30),
+    title: Joi.string().required().min(2).max(100),
     articleDescription: Joi.string().required().min(2),
     articleText: Joi.string().required().min(2),
     sourceUrl: Joi.string(),

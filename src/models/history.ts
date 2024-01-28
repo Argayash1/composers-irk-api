@@ -1,28 +1,24 @@
-import mongoose from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 
-const historySchema = new mongoose.Schema(
+interface Ihistory extends Document {
+  text: string;
+  author?: string;
+}
+
+const historySchema = new Schema<Ihistory>(
   {
-    articleSection: [{
-      title: {
-        type: String,
-        required: [true, 'не передан заголовок раздела статьи'],
-        minlength: [2, 'длина заголовка раздела статьи должна быть не менее 2 символов'],
-        maxlength: [30, 'длина заголовка раздела статьи должна быть не более 60 символов'],
-      },
-      sectionText: [{
-        type: String,
-        required: [true, 'не передано описание статьи'],
-        minlength: [2, 'длина описания статьи должна быть не менее 2 символов'],
-      }],
-    }],
+    text: {
+      type: String,
+      required: [true, 'не передан текст истории Союза'],
+      minlength: [2, 'длина текста истории Союза должна быть не менее 2 символов'],
+    },
     author: {
       type: String,
-      required: [true, 'не передан заголовок раздела статьи'],
-      minlength: [2, 'длина заголовка раздела статьи должна быть не менее 2 символов'],
-      maxlength: [30, 'длина заголовка раздела статьи должна быть не более 60 символов'],
+      minlength: [2, 'длина автора истории Союза должна быть не менее 2 символов'],
+      maxlength: [60, 'длина автора истории Союза должна быть не более 60 символов'],
     },
   },
   { versionKey: false },
 );
 
-module.exports = mongoose.model('news', historySchema);
+export default model('history', historySchema);
