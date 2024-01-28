@@ -57,8 +57,8 @@ const getVideos = async (req: Request, res: Response, next: NextFunction) => {
 
 const getVideoById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { articleId } = req.params;
-    const videos = await Video.findById(articleId);
+    const { videoId } = req.params;
+    const videos = await Video.findById(videoId);
     res.send(videos);
   } catch (err) {
     if (err instanceof CastError) {
