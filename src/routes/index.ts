@@ -8,7 +8,7 @@ import reports from './reports';
 import scores from './scores';
 import videos from './videos';
 import ourHistory from './ourHistory';
-import contacts from './contacts';
+import search from './search';
 
 import NotFoundError from '../errors/NotFoundError'; // импортируем класс ошибок NotFoundError
 import { NOT_FOUND_ERROR_MESSAGE } from '../utils/constants';
@@ -24,7 +24,7 @@ router.use('/reports', reports);
 router.use('/scores', scores);
 router.use('/videos', videos);
 router.use('/ourHistory', ourHistory);
-router.use('/contacts', contacts);
+router.use('/search', search);
 
 // роут для запросов по несуществующим URL
 router.use('*', (req, res, next) => {
