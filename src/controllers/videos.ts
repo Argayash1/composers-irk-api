@@ -27,6 +27,7 @@ interface IVideo {
   title?: string;
   performer?: string;
   iframeUrl?: string;
+  about?: string;
 }
 
 const getVideos = async (req: Request, res: Response, next: NextFunction) => {
@@ -70,9 +71,9 @@ const getVideoById = async (req: Request, res: Response, next: NextFunction) => 
 };
 
 const createVideo = async (req: Request, res: Response, next: NextFunction) => {
-  const { composer, title, performer, iframeUrl } = req.body;
+  const { composer, title, performer, iframeUrl, about } = req.body;
   try {
-    const video = await Video.create({ composer, title, performer, iframeUrl });
+    const video = await Video.create({ composer, title, performer, iframeUrl, about });
     res.status(CREATED_201).send(video);
   } catch (err) {
     if (err instanceof ValidationError) {
@@ -121,7 +122,7 @@ const updateVideoData = async (req: Request, res: Response, next: NextFunction, 
 };
 
 const updateVideoTextData = (req: Request, res: Response, next: NextFunction) => {
-  const { composer, title, performer } = req.body;
+  const { composer, title, performer, about } = req.body;
   updateVideoData(req, res, next, { composer, title, performer });
 };
 

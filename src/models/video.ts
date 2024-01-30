@@ -7,6 +7,8 @@ interface IVideo extends Document {
   title: string;
   performer?: string;
   iframeUrl: string;
+  createdAt?: Date;
+  about: string;
 }
 
 const videoSchema = new Schema<IVideo>(
@@ -33,6 +35,14 @@ const videoSchema = new Schema<IVideo>(
         validator: (url: string) => isUrl(url, { protocols: ['http', 'https'], require_protocol: true }),
         message: 'некорректный формат ссылки на аудиофайл',
       },
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+    about: {
+      type: String,
+      minlength: [2, 'длина описания произведения должна быть не менее 2 символов'],
     },
   },
   { versionKey: false },
