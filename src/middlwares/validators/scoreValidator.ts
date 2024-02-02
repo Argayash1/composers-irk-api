@@ -7,7 +7,7 @@ const scoreDataValidator = celebrate({
     composer: Joi.string().required().min(2).max(30),
     title: Joi.string().required().min(2).max(60),
     url: Joi.string().required(),
-    category: Joi.number().required().max(10),
+    category: Joi.string().required().max(10),
   }),
 });
 
@@ -16,7 +16,7 @@ const scoreTextDataValidator = celebrate({
   body: Joi.object().keys({
     composer: Joi.string().required().min(2).max(30),
     title: Joi.string().required().min(2).max(60),
-    category: Joi.number().required().max(10),
+    category: Joi.string().required().max(10),
   }),
 });
 
