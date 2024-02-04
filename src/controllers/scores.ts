@@ -13,6 +13,7 @@ import Score from '../models/score';
 
 // Импорт статус-кодов ошибок
 import {
+  BAD_REQUEST_INCORRECT_PARAMS_ERROR_MESSAGE,
   CAST_INCORRECT_SCOREID_ERROR_MESSAGE,
   CREATED_201,
   DELETE_SCORE_MESSAGE,
@@ -32,15 +33,35 @@ interface IAudio {
 const getScores = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const category = req.query.category || null;
+    const page = req.query.page ? Number(req.query.page as string) : undefined;
+    const limit = req.query.limit ? Number(req.query.limit as string) : undefined;
+
+    if (Number.isNaN(page) || Number.isNaN(limit) || Number.isNaN(category)) {
+      throw new BadRequestError(BAD_REQUEST_INCORRECT_PARAMS_ERROR_MESSAGE);
+    }
+
+    const skip = page && limit ? (page - 1) * limit : 0;
+
     let query = {};
 
     if (category) {
       query = { category: category };
     }
 
-    const scores = await Score.find(query);
+    const totalScoresCount = await Score.countDocuments(query);
 
-    res.send(scores);
+    let scoresQuery = Score.find(query);
+
+    if (page && limit) {
+      scoresQuery = scoresQuery.skip(skip).limit(limit);
+    }
+
+    const scores = await scoresQuery;
+
+    res.send({
+      data: scores,
+      totalPages: limit ? Math.ceil(totalScoresCount / limit) : undefined,
+    });
   } catch (err) {
     next(err);
   }

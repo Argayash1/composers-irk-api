@@ -18,6 +18,7 @@ import {
   DELETE_AUDIO_MESSAGE,
   AUDIO_NOT_FOUND_ERROR_MESSAGE,
   VALIDATION_ERROR_MESSAGE,
+  BAD_REQUEST_INCORRECT_PARAMS_ERROR_MESSAGE,
 } from '../utils/constants';
 
 const { ValidationError, CastError } = Error;
@@ -31,8 +32,29 @@ interface IAudio {
 
 const getAudios = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const audios = await Audio.find({});
-    res.send(audios);
+    const page = req.query.page ? Number(req.query.page as string) : undefined;
+    const limit = req.query.limit ? Number(req.query.limit as string) : undefined;
+
+    if (Number.isNaN(page) || Number.isNaN(limit)) {
+      throw new BadRequestError(BAD_REQUEST_INCORRECT_PARAMS_ERROR_MESSAGE);
+    }
+
+    const skip = page && limit ? (page - 1) * limit : 0;
+
+    const totalAudiosCount = await Audio.countDocuments();
+
+    let audiosQuery = Audio.find();
+
+    if (page && limit) {
+      audiosQuery = audiosQuery.skip(skip).limit(limit);
+    }
+
+    const audios = await audiosQuery;
+
+    res.send({
+      data: audios,
+      totalPages: limit ? Math.ceil(totalAudiosCount / limit) : undefined,
+    });
   } catch (err) {
     next(err);
   }

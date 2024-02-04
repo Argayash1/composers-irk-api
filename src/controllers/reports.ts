@@ -13,6 +13,7 @@ import Report from '../models/report';
 
 // Импорт статус-кодов ошибок
 import {
+  BAD_REQUEST_INCORRECT_PARAMS_ERROR_MESSAGE,
   BAD_REUEST_INCORRECT_REPORTINDEX_ERROR_MESSAGE,
   CAST_INCORRECT_REPORTID_ERROR_MESSAGE,
   CREATED_201,
@@ -31,9 +32,29 @@ interface IReport {
 
 const getReports = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const reports = await Report.find({});
+    const page = req.query.page ? Number(req.query.page as string) : undefined;
+    const limit = req.query.limit ? Number(req.query.limit as string) : undefined;
 
-    res.send(reports);
+    if (Number.isNaN(page) || Number.isNaN(limit)) {
+      throw new BadRequestError(BAD_REQUEST_INCORRECT_PARAMS_ERROR_MESSAGE);
+    }
+
+    const skip = page && limit ? (page - 1) * limit : 0;
+
+    const totalReportsCount = await Report.countDocuments();
+
+    let reportsQuery = Report.find();
+
+    if (page && limit) {
+      reportsQuery = reportsQuery.skip(skip).limit(limit);
+    }
+
+    const reports = await reportsQuery;
+
+    res.send({
+      data: reports,
+      totalPages: limit ? Math.ceil(totalReportsCount / limit) : undefined,
+    });
   } catch (err) {
     next(err);
   }
