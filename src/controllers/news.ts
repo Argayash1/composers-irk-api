@@ -51,7 +51,7 @@ const getNews = async (req: Request, res: Response, next: NextFunction) => {
     const news = await newsQuery;
 
     res.send({
-      news,
+      data: news,
       totalPages: limit ? Math.ceil(totalNewsCount / limit) : undefined,
     });
   } catch (err) {

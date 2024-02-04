@@ -47,7 +47,7 @@ const getProjects = async (req: Request, res: Response, next: NextFunction) => {
     const projects = await newsQuery;
 
     res.send({
-      projects,
+      data: projects,
       totalPages: limit ? Math.ceil(totalNewsCount / limit) : undefined,
     });
   } catch (err) {

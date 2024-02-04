@@ -48,7 +48,7 @@ const getVideos = async (req: Request, res: Response, next: NextFunction) => {
     const videos = await videosQuery;
 
     res.send({
-      videos,
+      data: videos,
       totalPages: limit ? Math.ceil(totalNewsCount / limit) : undefined,
     });
   } catch (err) {

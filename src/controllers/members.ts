@@ -55,7 +55,7 @@ const getUnionMembers = async (req: Request, res: Response, next: NextFunction) 
     const members = await membersQuery;
 
     res.send({
-      members,
+      data: members,
       totalPages: limit ? Math.ceil(totalNewsCount / limit) : undefined,
     });
   } catch (err) {
