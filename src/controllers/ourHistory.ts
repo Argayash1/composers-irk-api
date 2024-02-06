@@ -25,7 +25,12 @@ const { ValidationError, CastError } = Error;
 const getOurHistory = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const ourHistory = await History.find({});
-    res.send(ourHistory);
+    const totalOurHistoryCount = await History.countDocuments({});
+
+    res.send({
+      data: ourHistory,
+      totalPages: totalOurHistoryCount ? 1 : undefined,
+    });
   } catch (err) {
     next(err);
   }
