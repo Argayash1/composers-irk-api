@@ -63,7 +63,7 @@ const getNewsById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { newsId } = req.params;
     const news = await News.findById(newsId);
-    res.send(news);
+    res.send({ data: news });
   } catch (err) {
     if (err instanceof CastError) {
       next(new BadRequestError(CAST_INCORRECT_NEWSID_ERROR_MESSAGE));

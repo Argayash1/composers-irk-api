@@ -42,7 +42,7 @@ const getVideos = async (req: Request, res: Response, next: NextFunction) => {
 
     const skip = page && limit ? (page - 1) * limit : 0;
 
-    const totalNewsCount = await Video.countDocuments();
+    const totalVideosCount = await Video.countDocuments();
 
     let videosQuery = Video.find();
 
@@ -54,7 +54,7 @@ const getVideos = async (req: Request, res: Response, next: NextFunction) => {
 
     res.send({
       data: videos,
-      totalPages: limit ? Math.ceil(totalNewsCount / limit) : undefined,
+      totalPages: limit ? Math.ceil(totalVideosCount / limit) : undefined,
     });
   } catch (err) {
     next(err);
@@ -65,7 +65,7 @@ const getVideoById = async (req: Request, res: Response, next: NextFunction) => 
   try {
     const { videoId } = req.params;
     const videos = await Video.findById(videoId);
-    res.send(videos);
+    res.send({ data: videos });
   } catch (err) {
     if (err instanceof CastError) {
       next(new BadRequestError(CAST_INCORRECT_VIDEOID_ERROR_MESSAGE));

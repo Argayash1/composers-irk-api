@@ -41,19 +41,19 @@ const getProjects = async (req: Request, res: Response, next: NextFunction) => {
 
     const skip = page && limit ? (page - 1) * limit : 0;
 
-    const totalNewsCount = await Project.countDocuments();
+    const totalProjectsCount = await Project.countDocuments();
 
-    let newsQuery = Project.find();
+    let projectsQuery = Project.find();
 
     if (page && limit) {
-      newsQuery = newsQuery.skip(skip).limit(limit);
+      projectsQuery = projectsQuery.skip(skip).limit(limit);
     }
 
-    const projects = await newsQuery;
+    const projects = await projectsQuery;
 
     res.send({
       data: projects,
-      totalPages: limit ? Math.ceil(totalNewsCount / limit) : undefined,
+      totalPages: limit ? Math.ceil(totalProjectsCount / limit) : undefined,
     });
   } catch (err) {
     next(err);
@@ -63,8 +63,8 @@ const getProjects = async (req: Request, res: Response, next: NextFunction) => {
 const getProjectById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { projectId } = req.params;
-    const news = await Project.findById(projectId);
-    res.send(news);
+    const projects = await Project.findById(projectId);
+    res.send({ data: projects });
   } catch (err) {
     if (err instanceof CastError) {
       next(new BadRequestError(CAST_INCORRECT_PROJECTID_ERROR_MESSAGE));

@@ -42,19 +42,19 @@ const getArticles = async (req: Request, res: Response, next: NextFunction) => {
 
     const skip = page && limit ? (page - 1) * limit : 0;
 
-    const totalNewsCount = await Article.countDocuments();
+    const totalArticlesCount = await Article.countDocuments();
 
-    let newsQuery = Article.find();
+    let articlesQuery = Article.find();
 
     if (page && limit) {
-      newsQuery = newsQuery.skip(skip).limit(limit);
+      articlesQuery = articlesQuery.skip(skip).limit(limit);
     }
 
-    const articles = await newsQuery;
+    const articles = await articlesQuery;
 
     res.send({
       data: articles,
-      totalPages: limit ? Math.ceil(totalNewsCount / limit) : undefined,
+      totalPages: limit ? Math.ceil(totalArticlesCount / limit) : undefined,
     });
   } catch (err) {
     next(err);
@@ -64,8 +64,8 @@ const getArticles = async (req: Request, res: Response, next: NextFunction) => {
 const getArticleById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { articleId } = req.params;
-    const news = await Article.findById(articleId);
-    res.send(news);
+    const articles = await Article.findById(articleId);
+    res.send({ data: articles });
   } catch (err) {
     if (err instanceof CastError) {
       next(new BadRequestError(CAST_INCORRECT_ARTICLEID_ERROR_MESSAGE));

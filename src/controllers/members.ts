@@ -49,7 +49,7 @@ const getUnionMembers = async (req: Request, res: Response, next: NextFunction) 
 
     const skip = page && limit ? (page - 1) * limit : 0;
 
-    const totalNewsCount = await Member.countDocuments();
+    const totalMembersCount = await Member.countDocuments();
 
     let membersQuery = Member.find();
 
@@ -61,7 +61,7 @@ const getUnionMembers = async (req: Request, res: Response, next: NextFunction) 
 
     res.send({
       data: members,
-      totalPages: limit ? Math.ceil(totalNewsCount / limit) : undefined,
+      totalPages: limit ? Math.ceil(totalMembersCount / limit) : undefined,
     });
   } catch (err) {
     next(err);
@@ -72,7 +72,7 @@ const getUnionMemberById = async (req: Request, res: Response, next: NextFunctio
   try {
     const { memberId } = req.params;
     const member = await Member.findById(memberId);
-    res.send(member);
+    res.send({ data: member });
   } catch (err) {
     if (err instanceof CastError) {
       next(new BadRequestError(CAST_INCORRECT_MEMBERID_ERROR_MESSAGE));

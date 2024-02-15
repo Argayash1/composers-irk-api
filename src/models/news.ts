@@ -30,7 +30,7 @@ const newsSchema = new Schema<INews>(
     },
     newsText: {
       type: String,
-      required: [true, 'не передан заголовок новости'],
+      required: [true, 'не передан текст новости'],
       minlength: [2, 'длина текста новости должна быть не менее 2 символов'],
     },
   },
