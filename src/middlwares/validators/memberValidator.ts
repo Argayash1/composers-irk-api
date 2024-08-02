@@ -1,5 +1,5 @@
-import { celebrate, Joi } from 'celebrate';
-import { urlRegEx } from '../../utils/constants';
+import { celebrate, Joi } from "celebrate";
+import { urlRegEx } from "../../utils/constants";
 
 const memberDataValidator = celebrate({
   // валидируем тело запроса
@@ -38,12 +38,12 @@ const memberProfileDataValidator = celebrate({
 const memberAboutDataValidator = celebrate({
   // валидируем тело запроса
   body: Joi.object().keys({
-    biography: Joi.string().required().min(2).max(30),
-    shortBiography: Joi.string().required().min(2).max(30),
-    works: Joi.string().required().min(2).max(30),
-    competitions: Joi.string().required().min(2).max(30),
-    awards: Joi.string().required().min(2).max(30),
-    links: Joi.string().required().min(2).max(30),
+    biography: Joi.string().required().min(2),
+    shortBiography: Joi.string().required().min(2),
+    works: Joi.string().required().min(2),
+    competitions: Joi.string().min(2),
+    awards: Joi.string().min(2),
+    links: Joi.string().min(2),
   }),
 });
 
