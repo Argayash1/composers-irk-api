@@ -1,15 +1,15 @@
 // Импорт типов из express
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
 
 // Импорт классов ошибок из mongoose.Error
-import { Error } from 'mongoose';
+import { Error } from "mongoose";
 
 // Импорт классов ошибок из конструкторов ошибок
-import NotFoundError from '../errors/NotFoundError'; // импортируем класс ошибок NotFoundError
-import BadRequestError from '../errors/BadRequestError';
+import NotFoundError from "../errors/NotFoundError"; // импортируем класс ошибок NotFoundError
+import BadRequestError from "../errors/BadRequestError";
 
 // Импорт модели news и её интерфейса
-import Score from '../models/score';
+import Score from "../models/score";
 
 // Импорт статус-кодов ошибок
 import {
@@ -19,7 +19,7 @@ import {
   DELETE_SCORE_MESSAGE,
   SCORE_NOT_FOUND_ERROR_MESSAGE,
   VALIDATION_ERROR_MESSAGE,
-} from '../utils/constants';
+} from "../utils/constants";
 
 const { ValidationError, CastError } = Error;
 
@@ -34,7 +34,9 @@ const getScores = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const category = req.query.category || null;
     const page = req.query.page ? Number(req.query.page as string) : undefined;
-    const limit = req.query.limit ? Number(req.query.limit as string) : undefined;
+    const limit = req.query.limit
+      ? Number(req.query.limit as string)
+      : undefined;
 
     if (Number.isNaN(page) || Number.isNaN(limit) || Number.isNaN(category)) {
       throw new BadRequestError(BAD_REQUEST_INCORRECT_PARAMS_ERROR_MESSAGE);
@@ -76,7 +78,7 @@ const createScore = async (req: Request, res: Response, next: NextFunction) => {
     if (err instanceof ValidationError) {
       const errorMessage = Object.values(err.errors)
         .map((error) => error.message)
-        .join(', ');
+        .join(", ");
       next(new BadRequestError(`${VALIDATION_ERROR_MESSAGE} ${errorMessage}`));
     } else {
       next(err);
@@ -84,7 +86,12 @@ const createScore = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const updateScoreData = async (req: Request, res: Response, next: NextFunction, newsData: IAudio) => {
+const updateScoreData = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+  newsData: IAudio
+) => {
   try {
     const { scoreId } = req.params;
     // обновим имя найденного по _id пользователя
@@ -94,11 +101,11 @@ const updateScoreData = async (req: Request, res: Response, next: NextFunction, 
       {
         new: true, // обработчик then получит на вход обновлённую запись
         runValidators: true, // данные будут валидированы перед изменением
-      },
+      }
     );
 
     if (!score) {
-      throw new NotFoundError('Такого пользователя нет');
+      throw new NotFoundError("Такого пользователя нет");
     }
 
     res.send(score);
@@ -106,19 +113,23 @@ const updateScoreData = async (req: Request, res: Response, next: NextFunction, 
     if (err instanceof ValidationError) {
       const errorMessage = Object.values(err.errors)
         .map((error) => error.message)
-        .join(', ');
+        .join(", ");
       next(new BadRequestError(`Некорректные данные: ${errorMessage}`));
       return;
     }
     if (err instanceof CastError) {
-      next(new BadRequestError('Некорректный Id пользователя'));
+      next(new BadRequestError("Некорректный Id пользователя"));
     } else {
       next(err);
     }
   }
 };
 
-const updateScoreTextData = (req: Request, res: Response, next: NextFunction) => {
+const updateScoreTextData = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { title, composer, category } = req.body;
   updateScoreData(req, res, next, { title, composer, category });
 };
@@ -129,7 +140,11 @@ const updateScoreUrl = (req: Request, res: Response, next: NextFunction) => {
 };
 
 // Функция, которая удаляет новость по идентификатору
-const deleteScoreById = async (req: Request, res: Response, next: NextFunction) => {
+const deleteScoreById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { scoreId } = req.params;
     const score = await Score.findById(scoreId);
@@ -147,4 +162,10 @@ const deleteScoreById = async (req: Request, res: Response, next: NextFunction) 
   }
 };
 
-export { getScores, createScore, updateScoreTextData, updateScoreUrl, deleteScoreById };
+export {
+  getScores,
+  createScore,
+  updateScoreTextData,
+  updateScoreUrl,
+  deleteScoreById,
+};

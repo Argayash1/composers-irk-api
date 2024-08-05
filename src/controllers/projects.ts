@@ -1,15 +1,15 @@
 // Импорт типов из express
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
 
 // Импорт классов ошибок из mongoose.Error
-import { Error } from 'mongoose';
+import { Error } from "mongoose";
 
 // Импорт классов ошибок из конструкторов ошибок
-import NotFoundError from '../errors/NotFoundError'; // импортируем класс ошибок NotFoundError
-import BadRequestError from '../errors/BadRequestError';
+import NotFoundError from "../errors/NotFoundError"; // импортируем класс ошибок NotFoundError
+import BadRequestError from "../errors/BadRequestError";
 
 // Импорт модели news и её интерфейса
-import Project from '../models/project';
+import Project from "../models/project";
 
 // Импорт статус-кодов ошибок
 import {
@@ -19,7 +19,7 @@ import {
   DELETE_PROJECT_MESSAGE,
   PROJECT_NOT_FOUND_ERROR_MESSAGE,
   VALIDATION_ERROR_MESSAGE,
-} from '../utils/constants';
+} from "../utils/constants";
 
 const { ValidationError, CastError } = Error;
 
@@ -33,7 +33,9 @@ interface IProject {
 const getProjects = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const page = req.query.page ? Number(req.query.page as string) : undefined;
-    const limit = req.query.limit ? Number(req.query.limit as string) : undefined;
+    const limit = req.query.limit
+      ? Number(req.query.limit as string)
+      : undefined;
 
     if (Number.isNaN(page) || Number.isNaN(limit)) {
       throw new BadRequestError(BAD_REQUEST_INCORRECT_PARAMS_ERROR_MESSAGE);
@@ -60,7 +62,11 @@ const getProjects = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const getProjectById = async (req: Request, res: Response, next: NextFunction) => {
+const getProjectById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { projectId } = req.params;
     const projects = await Project.findById(projectId);
@@ -74,7 +80,11 @@ const getProjectById = async (req: Request, res: Response, next: NextFunction) =
   }
 };
 
-const createProject = async (req: Request, res: Response, next: NextFunction) => {
+const createProject = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { imageUrl, title, description } = req.body;
   try {
     const news = await Project.create({ imageUrl, title, description });
@@ -83,7 +93,7 @@ const createProject = async (req: Request, res: Response, next: NextFunction) =>
     if (err instanceof ValidationError) {
       const errorMessage = Object.values(err.errors)
         .map((error) => error.message)
-        .join(', ');
+        .join(", ");
       next(new BadRequestError(`${VALIDATION_ERROR_MESSAGE} ${errorMessage}`));
     } else {
       next(err);
@@ -91,7 +101,12 @@ const createProject = async (req: Request, res: Response, next: NextFunction) =>
   }
 };
 
-const updateProjectData = async (req: Request, res: Response, next: NextFunction, projectData: IProject) => {
+const updateProjectData = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+  projectData: IProject
+) => {
   try {
     const { projectId } = req.params;
     // обновим имя найденного по _id пользователя
@@ -101,11 +116,11 @@ const updateProjectData = async (req: Request, res: Response, next: NextFunction
       {
         new: true, // обработчик then получит на вход обновлённую запись
         runValidators: true, // данные будут валидированы перед изменением
-      },
+      }
     );
 
     if (!news) {
-      throw new NotFoundError('Такого пользователя нет');
+      throw new NotFoundError("Такого пользователя нет");
     }
 
     res.send(news);
@@ -113,30 +128,42 @@ const updateProjectData = async (req: Request, res: Response, next: NextFunction
     if (err instanceof ValidationError) {
       const errorMessage = Object.values(err.errors)
         .map((error) => error.message)
-        .join(', ');
+        .join(", ");
       next(new BadRequestError(`Некорректные данные: ${errorMessage}`));
       return;
     }
     if (err instanceof CastError) {
-      next(new BadRequestError('Некорректный Id пользователя'));
+      next(new BadRequestError("Некорректный Id пользователя"));
     } else {
       next(err);
     }
   }
 };
 
-const updateProjectTextData = (req: Request, res: Response, next: NextFunction) => {
+const updateProjectTextData = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { title, description } = req.body;
   updateProjectData(req, res, next, { title, description });
 };
 
-const updateProjectImage = (req: Request, res: Response, next: NextFunction) => {
+const updateProjectImage = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { imageUrl } = req.body;
   updateProjectData(req, res, next, { imageUrl });
 };
 
 // Функция, которая удаляет новость по идентификатору
-const deleteProjectById = async (req: Request, res: Response, next: NextFunction) => {
+const deleteProjectById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { projectId } = req.params;
     const news = await Project.findById(projectId);
@@ -154,4 +181,11 @@ const deleteProjectById = async (req: Request, res: Response, next: NextFunction
   }
 };
 
-export { getProjects, getProjectById, updateProjectTextData, updateProjectImage, createProject, deleteProjectById };
+export {
+  getProjects,
+  getProjectById,
+  updateProjectTextData,
+  updateProjectImage,
+  createProject,
+  deleteProjectById,
+};

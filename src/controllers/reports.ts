@@ -1,15 +1,15 @@
 // Импорт типов из express
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
 
 // Импорт классов ошибок из mongoose.Error
-import { Error } from 'mongoose';
+import { Error } from "mongoose";
 
 // Импорт классов ошибок из конструкторов ошибок
-import NotFoundError from '../errors/NotFoundError'; // импортируем класс ошибок NotFoundError
-import BadRequestError from '../errors/BadRequestError';
+import NotFoundError from "../errors/NotFoundError"; // импортируем класс ошибок NotFoundError
+import BadRequestError from "../errors/BadRequestError";
 
 // Импорт модели news и её интерфейса
-import Report from '../models/report';
+import Report from "../models/report";
 
 // Импорт статус-кодов ошибок
 import {
@@ -20,7 +20,7 @@ import {
   DELETE_REPORT_MESSAGE,
   REPORT_NOT_FOUND_ERROR_MESSAGE,
   VALIDATION_ERROR_MESSAGE,
-} from '../utils/constants';
+} from "../utils/constants";
 
 const { ValidationError, CastError } = Error;
 
@@ -33,7 +33,9 @@ interface IReport {
 const getReports = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const page = req.query.page ? Number(req.query.page as string) : undefined;
-    const limit = req.query.limit ? Number(req.query.limit as string) : undefined;
+    const limit = req.query.limit
+      ? Number(req.query.limit as string)
+      : undefined;
 
     if (Number.isNaN(page) || Number.isNaN(limit)) {
       throw new BadRequestError(BAD_REQUEST_INCORRECT_PARAMS_ERROR_MESSAGE);
@@ -60,7 +62,11 @@ const getReports = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const getReportByIndex = async (req: Request, res: Response, next: NextFunction) => {
+const getReportByIndex = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const reports = await Report.find({});
     const reportIndex = parseInt(req.params.reportIndex); // Извлечение reportIndex из URL-адреса и преобразование в число
@@ -78,7 +84,11 @@ const getReportByIndex = async (req: Request, res: Response, next: NextFunction)
   }
 };
 
-const createReport = async (req: Request, res: Response, next: NextFunction) => {
+const createReport = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { year, imageUrl } = req.body;
   try {
     const report = await Report.create({ year, imageUrl });
@@ -87,7 +97,7 @@ const createReport = async (req: Request, res: Response, next: NextFunction) => 
     if (err instanceof ValidationError) {
       const errorMessage = Object.values(err.errors)
         .map((error) => error.message)
-        .join(', ');
+        .join(", ");
       next(new BadRequestError(`${VALIDATION_ERROR_MESSAGE} ${errorMessage}`));
     } else {
       next(err);
@@ -95,7 +105,12 @@ const createReport = async (req: Request, res: Response, next: NextFunction) => 
   }
 };
 
-const updateReportData = async (req: Request, res: Response, next: NextFunction, newsData: IReport) => {
+const updateReportData = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+  newsData: IReport
+) => {
   try {
     const { reportId } = req.params;
     // обновим имя найденного по _id пользователя
@@ -105,11 +120,11 @@ const updateReportData = async (req: Request, res: Response, next: NextFunction,
       {
         new: true, // обработчик then получит на вход обновлённую запись
         runValidators: true, // данные будут валидированы перед изменением
-      },
+      }
     );
 
     if (!report) {
-      throw new NotFoundError('Такого пользователя нет');
+      throw new NotFoundError("Такого пользователя нет");
     }
 
     res.send(report);
@@ -117,19 +132,23 @@ const updateReportData = async (req: Request, res: Response, next: NextFunction,
     if (err instanceof ValidationError) {
       const errorMessage = Object.values(err.errors)
         .map((error) => error.message)
-        .join(', ');
+        .join(", ");
       next(new BadRequestError(`Некорректные данные: ${errorMessage}`));
       return;
     }
     if (err instanceof CastError) {
-      next(new BadRequestError('Некорректный Id пользователя'));
+      next(new BadRequestError("Некорректный Id пользователя"));
     } else {
       next(err);
     }
   }
 };
 
-const updateReportTextData = (req: Request, res: Response, next: NextFunction) => {
+const updateReportTextData = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { year } = req.body;
   updateReportData(req, res, next, { year });
 };
@@ -140,7 +159,11 @@ const updateReportImage = (req: Request, res: Response, next: NextFunction) => {
 };
 
 // Функция, которая удаляет новость по идентификатору
-const deleteReportById = async (req: Request, res: Response, next: NextFunction) => {
+const deleteReportById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { reportId } = req.params;
     const report = await Report.findById(reportId);
@@ -158,4 +181,11 @@ const deleteReportById = async (req: Request, res: Response, next: NextFunction)
   }
 };
 
-export { getReports, getReportByIndex, createReport, updateReportTextData, updateReportImage, deleteReportById };
+export {
+  getReports,
+  getReportByIndex,
+  createReport,
+  updateReportTextData,
+  updateReportImage,
+  deleteReportById,
+};

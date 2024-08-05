@@ -1,15 +1,15 @@
 // Импорт типов из express
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
 
 // Импорт классов ошибок из mongoose.Error
-import { Error } from 'mongoose';
+import { Error } from "mongoose";
 
 // Импорт классов ошибок из конструкторов ошибок
-import NotFoundError from '../errors/NotFoundError'; // импортируем класс ошибок NotFoundError
-import BadRequestError from '../errors/BadRequestError';
+import NotFoundError from "../errors/NotFoundError"; // импортируем класс ошибок NotFoundError
+import BadRequestError from "../errors/BadRequestError";
 
 // Импорт модели news и её интерфейса
-import Member from '../models/member';
+import Member from "../models/member";
 
 // Импорт статус-кодов ошибок
 import {
@@ -19,7 +19,7 @@ import {
   DELETE_PROJECT_MESSAGE,
   PROJECT_NOT_FOUND_ERROR_MESSAGE,
   VALIDATION_ERROR_MESSAGE,
-} from '../utils/constants';
+} from "../utils/constants";
 
 const { ValidationError, CastError } = Error;
 
@@ -38,10 +38,16 @@ interface IMember {
 }
 
 // Функция, которая возвращает все новости
-const getUnionMembers = async (req: Request, res: Response, next: NextFunction) => {
+const getUnionMembers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const page = req.query.page ? Number(req.query.page as string) : undefined;
-    const limit = req.query.limit ? Number(req.query.limit as string) : undefined;
+    const limit = req.query.limit
+      ? Number(req.query.limit as string)
+      : undefined;
 
     if (Number.isNaN(page) || Number.isNaN(limit)) {
       throw new BadRequestError(BAD_REQUEST_INCORRECT_PARAMS_ERROR_MESSAGE);
@@ -51,7 +57,7 @@ const getUnionMembers = async (req: Request, res: Response, next: NextFunction) 
 
     const totalMembersCount = await Member.countDocuments();
 
-    let membersQuery = Member.find();
+    let membersQuery = Member.find().sort({ surname: 1 });
 
     if (page && limit) {
       membersQuery = membersQuery.skip(skip).limit(limit);
@@ -68,7 +74,11 @@ const getUnionMembers = async (req: Request, res: Response, next: NextFunction) 
   }
 };
 
-const getUnionMemberById = async (req: Request, res: Response, next: NextFunction) => {
+const getUnionMemberById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { memberId } = req.params;
     const member = await Member.findById(memberId);
@@ -82,7 +92,11 @@ const getUnionMemberById = async (req: Request, res: Response, next: NextFunctio
   }
 };
 
-const createUnionMember = async (req: Request, res: Response, next: NextFunction) => {
+const createUnionMember = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const {
     imageUrl,
     surname,
@@ -115,7 +129,7 @@ const createUnionMember = async (req: Request, res: Response, next: NextFunction
     if (err instanceof ValidationError) {
       const errorMessage = Object.values(err.errors)
         .map((error) => error.message)
-        .join(', ');
+        .join(", ");
       next(new BadRequestError(`${VALIDATION_ERROR_MESSAGE} ${errorMessage}`));
     } else {
       next(err);
@@ -123,7 +137,12 @@ const createUnionMember = async (req: Request, res: Response, next: NextFunction
   }
 };
 
-const updateUnionMemberData = async (req: Request, res: Response, next: NextFunction, memberData: IMember) => {
+const updateUnionMemberData = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+  memberData: IMember
+) => {
   try {
     const { memberId } = req.params;
     // обновим имя найденного по _id пользователя
@@ -133,11 +152,11 @@ const updateUnionMemberData = async (req: Request, res: Response, next: NextFunc
       {
         new: true, // обработчик then получит на вход обновлённую запись
         runValidators: true, // данные будут валидированы перед изменением
-      },
+      }
     );
 
     if (!news) {
-      throw new NotFoundError('Такого пользователя нет');
+      throw new NotFoundError("Такого пользователя нет");
     }
 
     res.send(news);
@@ -145,35 +164,64 @@ const updateUnionMemberData = async (req: Request, res: Response, next: NextFunc
     if (err instanceof ValidationError) {
       const errorMessage = Object.values(err.errors)
         .map((error) => error.message)
-        .join(', ');
+        .join(", ");
       next(new BadRequestError(`Некорректные данные: ${errorMessage}`));
       return;
     }
     if (err instanceof CastError) {
-      next(new BadRequestError('Некорректный Id пользователя'));
+      next(new BadRequestError("Некорректный Id пользователя"));
     } else {
       next(err);
     }
   }
 };
 
-const updateUnionMemberProfile = (req: Request, res: Response, next: NextFunction) => {
+const updateUnionMemberProfile = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { surname, patronymic, name, profession } = req.body;
-  updateUnionMemberData(req, res, next, { surname, patronymic, name, profession });
+  updateUnionMemberData(req, res, next, {
+    surname,
+    patronymic,
+    name,
+    profession,
+  });
 };
 
-const updateUnionMemberAbout = (req: Request, res: Response, next: NextFunction) => {
-  const { biography, shortBiography, works, awards, competitions, links } = req.body;
-  updateUnionMemberData(req, res, next, { biography, shortBiography, works, awards, competitions, links });
+const updateUnionMemberAbout = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { biography, shortBiography, works, awards, competitions, links } =
+    req.body;
+  updateUnionMemberData(req, res, next, {
+    biography,
+    shortBiography,
+    works,
+    awards,
+    competitions,
+    links,
+  });
 };
 
-const updateUnionMemberImage = (req: Request, res: Response, next: NextFunction) => {
+const updateUnionMemberImage = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { imageUrl } = req.body;
   updateUnionMemberData(req, res, next, { imageUrl });
 };
 
 // Функция, которая удаляет новость по идентификатору
-const deleteUnionMemberById = async (req: Request, res: Response, next: NextFunction) => {
+const deleteUnionMemberById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { memberId } = req.params;
     const news = await Member.findById(memberId);

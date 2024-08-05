@@ -1,15 +1,15 @@
 // Импорт типов из express
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
 
 // Импорт классов ошибок из mongoose.Error
-import { Error } from 'mongoose';
+import { Error } from "mongoose";
 
 // Импорт классов ошибок из конструкторов ошибок
-import NotFoundError from '../errors/NotFoundError'; // импортируем класс ошибок NotFoundError
-import BadRequestError from '../errors/BadRequestError';
+import NotFoundError from "../errors/NotFoundError"; // импортируем класс ошибок NotFoundError
+import BadRequestError from "../errors/BadRequestError";
 
 // Импорт модели news и её интерфейса
-import Article from '../models//article';
+import Article from "../models//article";
 
 // Импорт статус-кодов ошибок
 import {
@@ -19,7 +19,7 @@ import {
   ARTICLE_NOT_FOUND_ERROR_MESSAGE,
   VALIDATION_ERROR_MESSAGE,
   BAD_REQUEST_INCORRECT_PARAMS_ERROR_MESSAGE,
-} from '../utils/constants';
+} from "../utils/constants";
 
 const { ValidationError, CastError } = Error;
 
@@ -34,7 +34,9 @@ interface IArticle {
 const getArticles = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const page = req.query.page ? Number(req.query.page as string) : undefined;
-    const limit = req.query.limit ? Number(req.query.limit as string) : undefined;
+    const limit = req.query.limit
+      ? Number(req.query.limit as string)
+      : undefined;
 
     if (Number.isNaN(page) || Number.isNaN(limit)) {
       throw new BadRequestError(BAD_REQUEST_INCORRECT_PARAMS_ERROR_MESSAGE);
@@ -61,7 +63,11 @@ const getArticles = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const getArticleById = async (req: Request, res: Response, next: NextFunction) => {
+const getArticleById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { articleId } = req.params;
     const articles = await Article.findById(articleId);
@@ -75,16 +81,34 @@ const getArticleById = async (req: Request, res: Response, next: NextFunction) =
   }
 };
 
-const createArticle = async (req: Request, res: Response, next: NextFunction) => {
-  const { imageUrl, createdAt, title, articleText, articleDescription, sourceUrl } = req.body;
+const createArticle = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const {
+    imageUrl,
+    createdAt,
+    title,
+    articleText,
+    articleDescription,
+    sourceUrl,
+  } = req.body;
   try {
-    const news = await Article.create({ imageUrl, createdAt, title, articleText, articleDescription, sourceUrl });
+    const news = await Article.create({
+      imageUrl,
+      createdAt,
+      title,
+      articleText,
+      articleDescription,
+      sourceUrl,
+    });
     res.status(CREATED_201).send(news);
   } catch (err) {
     if (err instanceof ValidationError) {
       const errorMessage = Object.values(err.errors)
         .map((error) => error.message)
-        .join(', ');
+        .join(", ");
       next(new BadRequestError(`${VALIDATION_ERROR_MESSAGE} ${errorMessage}`));
     } else {
       next(err);
@@ -92,7 +116,12 @@ const createArticle = async (req: Request, res: Response, next: NextFunction) =>
   }
 };
 
-const updateArticleData = async (req: Request, res: Response, next: NextFunction, newsData: IArticle) => {
+const updateArticleData = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+  newsData: IArticle
+) => {
   try {
     const { articleId } = req.params;
     // обновим имя найденного по _id пользователя
@@ -102,11 +131,11 @@ const updateArticleData = async (req: Request, res: Response, next: NextFunction
       {
         new: true, // обработчик then получит на вход обновлённую запись
         runValidators: true, // данные будут валидированы перед изменением
-      },
+      }
     );
 
     if (!article) {
-      throw new NotFoundError('Такого пользователя нет');
+      throw new NotFoundError("Такого пользователя нет");
     }
 
     res.send(article);
@@ -114,30 +143,47 @@ const updateArticleData = async (req: Request, res: Response, next: NextFunction
     if (err instanceof ValidationError) {
       const errorMessage = Object.values(err.errors)
         .map((error) => error.message)
-        .join(', ');
+        .join(", ");
       next(new BadRequestError(`Некорректные данные: ${errorMessage}`));
       return;
     }
     if (err instanceof CastError) {
-      next(new BadRequestError('Некорректный Id пользователя'));
+      next(new BadRequestError("Некорректный Id пользователя"));
     } else {
       next(err);
     }
   }
 };
 
-const updateArticleTextData = (req: Request, res: Response, next: NextFunction) => {
+const updateArticleTextData = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { title, articleText, articleDescription, sourceUrl } = req.body;
-  updateArticleData(req, res, next, { title, articleText, articleDescription, sourceUrl });
+  updateArticleData(req, res, next, {
+    title,
+    articleText,
+    articleDescription,
+    sourceUrl,
+  });
 };
 
-const updateArticleImage = (req: Request, res: Response, next: NextFunction) => {
+const updateArticleImage = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { imageUrl } = req.body;
   updateArticleData(req, res, next, { imageUrl });
 };
 
 // Функция, которая удаляет новость по идентификатору
-const deleteArticleById = async (req: Request, res: Response, next: NextFunction) => {
+const deleteArticleById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { articleId } = req.params;
     const article = await Article.findById(articleId);
@@ -155,4 +201,11 @@ const deleteArticleById = async (req: Request, res: Response, next: NextFunction
   }
 };
 
-export { getArticles, getArticleById, createArticle, updateArticleTextData, updateArticleImage, deleteArticleById };
+export {
+  getArticles,
+  getArticleById,
+  createArticle,
+  updateArticleTextData,
+  updateArticleImage,
+  deleteArticleById,
+};

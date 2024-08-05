@@ -1,15 +1,15 @@
 // Импорт типов из express
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
 
 // Импорт классов ошибок из mongoose.Error
-import { Error } from 'mongoose';
+import { Error } from "mongoose";
 
 // Импорт классов ошибок из конструкторов ошибок
-import NotFoundError from '../errors/NotFoundError'; // импортируем класс ошибок NotFoundError
-import BadRequestError from '../errors/BadRequestError';
+import NotFoundError from "../errors/NotFoundError"; // импортируем класс ошибок NotFoundError
+import BadRequestError from "../errors/BadRequestError";
 
 // Импорт модели news и её интерфейса
-import History from '../models/history';
+import History from "../models/history";
 
 // Импорт статус-кодов ошибок
 import {
@@ -18,11 +18,15 @@ import {
   DELETE_AUDIO_MESSAGE,
   AUDIO_NOT_FOUND_ERROR_MESSAGE,
   VALIDATION_ERROR_MESSAGE,
-} from '../utils/constants';
+} from "../utils/constants";
 
 const { ValidationError, CastError } = Error;
 
-const getOurHistory = async (req: Request, res: Response, next: NextFunction) => {
+const getOurHistory = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const ourHistory = await History.find({});
     const totalOurHistoryCount = await History.countDocuments({});
@@ -45,7 +49,7 @@ const createOurHistory = async (req: Request, res: Response, next: NextFunction)
     if (err instanceof ValidationError) {
       const errorMessage = Object.values(err.errors)
         .map((error) => error.message)
-        .join(', ');
+        .join(", ");
       next(new BadRequestError(`${VALIDATION_ERROR_MESSAGE} ${errorMessage}`));
     } else {
       next(err);
@@ -64,11 +68,11 @@ const updateOurHistoryData = async (req: Request, res: Response, next: NextFunct
       {
         new: true, // обработчик then получит на вход обновлённую запись
         runValidators: true, // данные будут валидированы перед изменением
-      },
+      }
     );
 
     if (!ourHistory) {
-      throw new NotFoundError('Такого пользователя нет');
+      throw new NotFoundError("Такого пользователя нет");
     }
 
     res.send(ourHistory);
@@ -76,12 +80,12 @@ const updateOurHistoryData = async (req: Request, res: Response, next: NextFunct
     if (err instanceof ValidationError) {
       const errorMessage = Object.values(err.errors)
         .map((error) => error.message)
-        .join(', ');
+        .join(", ");
       next(new BadRequestError(`Некорректные данные: ${errorMessage}`));
       return;
     }
     if (err instanceof CastError) {
-      next(new BadRequestError('Некорректный Id пользователя'));
+      next(new BadRequestError("Некорректный Id пользователя"));
     } else {
       next(err);
     }

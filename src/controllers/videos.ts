@@ -1,15 +1,15 @@
 // Импорт типов из express
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
 
 // Импорт классов ошибок из mongoose.Error
-import { Error } from 'mongoose';
+import { Error } from "mongoose";
 
 // Импорт классов ошибок из конструкторов ошибок
-import NotFoundError from '../errors/NotFoundError'; // импортируем класс ошибок NotFoundError
-import BadRequestError from '../errors/BadRequestError';
+import NotFoundError from "../errors/NotFoundError"; // импортируем класс ошибок NotFoundError
+import BadRequestError from "../errors/BadRequestError";
 
 // Импорт модели news и её интерфейса
-import Video from '../models/video';
+import Video from "../models/video";
 
 // Импорт статус-кодов ошибок
 import {
@@ -19,7 +19,7 @@ import {
   VIDEO_NOT_FOUND_ERROR_MESSAGE,
   VALIDATION_ERROR_MESSAGE,
   BAD_REQUEST_INCORRECT_PARAMS_ERROR_MESSAGE,
-} from '../utils/constants';
+} from "../utils/constants";
 
 const { ValidationError, CastError } = Error;
 
@@ -34,7 +34,9 @@ interface IVideo {
 const getVideos = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const page = req.query.page ? Number(req.query.page as string) : undefined;
-    const limit = req.query.limit ? Number(req.query.limit as string) : undefined;
+    const limit = req.query.limit
+      ? Number(req.query.limit as string)
+      : undefined;
 
     if (Number.isNaN(page) || Number.isNaN(limit)) {
       throw new BadRequestError(BAD_REQUEST_INCORRECT_PARAMS_ERROR_MESSAGE);
@@ -61,7 +63,11 @@ const getVideos = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const getVideoById = async (req: Request, res: Response, next: NextFunction) => {
+const getVideoById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { videoId } = req.params;
     const videos = await Video.findById(videoId);
@@ -78,13 +84,19 @@ const getVideoById = async (req: Request, res: Response, next: NextFunction) => 
 const createVideo = async (req: Request, res: Response, next: NextFunction) => {
   const { composer, title, performer, iframeUrl, about } = req.body;
   try {
-    const video = await Video.create({ composer, title, performer, iframeUrl, about });
+    const video = await Video.create({
+      composer,
+      title,
+      performer,
+      iframeUrl,
+      about,
+    });
     res.status(CREATED_201).send(video);
   } catch (err) {
     if (err instanceof ValidationError) {
       const errorMessage = Object.values(err.errors)
         .map((error) => error.message)
-        .join(', ');
+        .join(", ");
       next(new BadRequestError(`${VALIDATION_ERROR_MESSAGE} ${errorMessage}`));
     } else {
       next(err);
@@ -92,7 +104,12 @@ const createVideo = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const updateVideoData = async (req: Request, res: Response, next: NextFunction, newsData: IVideo) => {
+const updateVideoData = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+  newsData: IVideo
+) => {
   try {
     const { videoId } = req.params;
     // обновим имя найденного по _id пользователя
@@ -102,11 +119,11 @@ const updateVideoData = async (req: Request, res: Response, next: NextFunction, 
       {
         new: true, // обработчик then получит на вход обновлённую запись
         runValidators: true, // данные будут валидированы перед изменением
-      },
+      }
     );
 
     if (!video) {
-      throw new NotFoundError('Такого пользователя нет');
+      throw new NotFoundError("Такого пользователя нет");
     }
 
     res.send(video);
@@ -114,19 +131,23 @@ const updateVideoData = async (req: Request, res: Response, next: NextFunction, 
     if (err instanceof ValidationError) {
       const errorMessage = Object.values(err.errors)
         .map((error) => error.message)
-        .join(', ');
+        .join(", ");
       next(new BadRequestError(`Некорректные данные: ${errorMessage}`));
       return;
     }
     if (err instanceof CastError) {
-      next(new BadRequestError('Некорректный Id пользователя'));
+      next(new BadRequestError("Некорректный Id пользователя"));
     } else {
       next(err);
     }
   }
 };
 
-const updateVideoTextData = (req: Request, res: Response, next: NextFunction) => {
+const updateVideoTextData = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { composer, title, performer, about } = req.body;
   updateVideoData(req, res, next, { composer, title, performer });
 };
@@ -137,7 +158,11 @@ const updateVideoUrl = (req: Request, res: Response, next: NextFunction) => {
 };
 
 // Функция, которая удаляет новость по идентификатору
-const deleteVideoById = async (req: Request, res: Response, next: NextFunction) => {
+const deleteVideoById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { videoId } = req.params;
     const video = await Video.findById(videoId);
@@ -155,4 +180,11 @@ const deleteVideoById = async (req: Request, res: Response, next: NextFunction) 
   }
 };
 
-export { getVideos, getVideoById, createVideo, updateVideoTextData, updateVideoUrl, deleteVideoById };
+export {
+  getVideos,
+  getVideoById,
+  createVideo,
+  updateVideoTextData,
+  updateVideoUrl,
+  deleteVideoById,
+};
