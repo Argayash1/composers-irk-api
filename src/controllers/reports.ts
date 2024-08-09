@@ -84,6 +84,24 @@ const getReportByIndex = async (
   }
 };
 
+const getReportById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { reportId } = req.params;
+    const report = await Report.findById(reportId);
+    res.send({ data: report });
+  } catch (err) {
+    if (err instanceof CastError) {
+      next(new BadRequestError(CAST_INCORRECT_REPORTID_ERROR_MESSAGE));
+    } else {
+      next(err);
+    }
+  }
+};
+
 const createReport = async (
   req: Request,
   res: Response,
@@ -184,6 +202,7 @@ const deleteReportById = async (
 export {
   getReports,
   getReportByIndex,
+  getReportById,
   createReport,
   updateReportTextData,
   updateReportImage,

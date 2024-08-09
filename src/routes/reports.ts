@@ -1,13 +1,14 @@
-import { Router } from 'express'; // импортируем роутер из express
+import { Router } from "express"; // импортируем роутер из express
 
 import {
   getReports,
+  getReportById,
   createReport,
   updateReportTextData,
   updateReportImage,
   deleteReportById,
   getReportByIndex,
-} from '../controllers/reports';
+} from "../controllers/reports";
 
 import {
   reportDataValidator,
@@ -15,20 +16,32 @@ import {
   reportImageUrlValidator,
   reportIdValidator,
   reportIndexValidator,
-} from '../middlwares/validators/reportValidator';
+} from "../middlwares/validators/reportValidator";
 
 const router = Router();
 
-router.get('/', getReports);
+router.get("/", getReports);
 
-router.post('/', reportDataValidator, createReport);
+router.post("/", reportDataValidator, createReport);
 
-router.get('/:reportIndex', reportIndexValidator, getReportByIndex);
+router.get("/:reportId", reportIdValidator, getReportById);
 
-router.patch('/:reportId', reportIdValidator, reportTextDataValidator, updateReportTextData);
+router.get("/index/:reportIndex", reportIndexValidator, getReportByIndex);
 
-router.patch('/:reportId/image', reportIdValidator, reportImageUrlValidator, updateReportImage);
+router.patch(
+  "/:reportId",
+  reportIdValidator,
+  reportTextDataValidator,
+  updateReportTextData
+);
 
-router.delete('/:reportId', reportIdValidator, deleteReportById);
+router.patch(
+  "/:reportId/image",
+  reportIdValidator,
+  reportImageUrlValidator,
+  updateReportImage
+);
+
+router.delete("/:reportId", reportIdValidator, deleteReportById);
 
 export default router;

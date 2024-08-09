@@ -69,6 +69,24 @@ const getScores = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const getScoreById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { scoreId } = req.params;
+    const score = await Score.findById(scoreId);
+    res.send({ data: score });
+  } catch (err) {
+    if (err instanceof CastError) {
+      next(new BadRequestError(CAST_INCORRECT_SCOREID_ERROR_MESSAGE));
+    } else {
+      next(err);
+    }
+  }
+};
+
 const createScore = async (req: Request, res: Response, next: NextFunction) => {
   const { composer, title, category, url } = req.body;
   try {
@@ -164,6 +182,7 @@ const deleteScoreById = async (
 
 export {
   getScores,
+  getScoreById,
   createScore,
   updateScoreTextData,
   updateScoreUrl,

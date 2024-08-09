@@ -40,7 +40,11 @@ const getOurHistory = async (
   }
 };
 
-const createOurHistory = async (req: Request, res: Response, next: NextFunction) => {
+const createOurHistory = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { author, text } = req.body;
   try {
     const ourHistory = await History.create({ author, text });
@@ -57,7 +61,11 @@ const createOurHistory = async (req: Request, res: Response, next: NextFunction)
   }
 };
 
-const updateOurHistoryData = async (req: Request, res: Response, next: NextFunction) => {
+const updateOurHistoryData = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { historyId } = req.params;
     const { text, author } = req.body;
@@ -93,7 +101,11 @@ const updateOurHistoryData = async (req: Request, res: Response, next: NextFunct
 };
 
 // Функция, которая удаляет новость по идентификатору
-const deleteOurHistoryById = async (req: Request, res: Response, next: NextFunction) => {
+const deleteOurHistoryById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { historyId } = req.params;
     const ourHistory = await History.findById(historyId);
@@ -111,4 +123,9 @@ const deleteOurHistoryById = async (req: Request, res: Response, next: NextFunct
   }
 };
 
-export { getOurHistory, createOurHistory, updateOurHistoryData, deleteOurHistoryById };
+export {
+  getOurHistory,
+  createOurHistory,
+  updateOurHistoryData,
+  deleteOurHistoryById,
+};

@@ -62,6 +62,24 @@ const getAudios = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const getAudioById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { audioId } = req.params;
+    const audio = await Audio.findById(audioId);
+    res.send({ data: audio });
+  } catch (err) {
+    if (err instanceof CastError) {
+      next(new BadRequestError(CAST_INCORRECT_AUDIOID_ERROR_MESSAGE));
+    } else {
+      next(err);
+    }
+  }
+};
+
 const createAudio = async (req: Request, res: Response, next: NextFunction) => {
   const { composer, title, performer, audioUrl } = req.body;
   try {
@@ -157,6 +175,7 @@ const deleteAudioById = async (
 
 export {
   getAudios,
+  getAudioById,
   createAudio,
   updateAudioTextData,
   updateAudioUrl,
