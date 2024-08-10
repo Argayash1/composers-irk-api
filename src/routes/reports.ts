@@ -4,16 +4,13 @@ import {
   getReports,
   getReportById,
   createReport,
-  updateReportTextData,
-  updateReportImage,
+  updateReport,
   deleteReportById,
   getReportByIndex,
 } from "../controllers/reports";
 
 import {
   reportDataValidator,
-  reportTextDataValidator,
-  reportImageUrlValidator,
   reportIdValidator,
   reportIndexValidator,
 } from "../middlwares/validators/reportValidator";
@@ -28,19 +25,7 @@ router.get("/:reportId", reportIdValidator, getReportById);
 
 router.get("/index/:reportIndex", reportIndexValidator, getReportByIndex);
 
-router.patch(
-  "/:reportId",
-  reportIdValidator,
-  reportTextDataValidator,
-  updateReportTextData
-);
-
-router.patch(
-  "/:reportId/image",
-  reportIdValidator,
-  reportImageUrlValidator,
-  updateReportImage
-);
+router.patch("/:reportId", reportIdValidator, reportDataValidator, updateReport);
 
 router.delete("/:reportId", reportIdValidator, deleteReportById);
 

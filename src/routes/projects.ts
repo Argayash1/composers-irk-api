@@ -4,16 +4,13 @@ import {
   getProjects,
   getProjectById,
   createProject,
-  updateProjectTextData,
-  updateProjectImage,
+  updateProject,
   deleteProjectById,
 } from '../controllers/projects';
 
 import {
   projectDataValidator,
   projectQueryParamsValidator,
-  projectTextDataValidator,
-  projectImageUrlValidator,
   projectIdValidator,
 } from '../middlwares/validators/projectValidator';
 
@@ -25,9 +22,7 @@ router.post('/', projectDataValidator, createProject);
 
 router.get('/:projectId', projectIdValidator, getProjectById);
 
-router.patch('/:projectId', projectIdValidator, projectTextDataValidator, updateProjectTextData);
-
-router.patch('/:projectId/image', projectIdValidator, projectImageUrlValidator, updateProjectImage);
+router.patch('/:projectId', projectIdValidator, projectDataValidator, updateProject);
 
 router.delete('/:projectId', projectIdValidator, deleteProjectById);
 

@@ -124,18 +124,19 @@ const createReport = async (
   }
 };
 
-const updateReportData = async (
+const updateReport = async (
   req: Request,
   res: Response,
   next: NextFunction,
-  newsData: IReport
 ) => {
   try {
     const { reportId } = req.params;
+    const { year, imageUrl } = req.body;
+
     // обновим имя найденного по _id пользователя
     const report = await Report.findByIdAndUpdate(
       reportId,
-      newsData, // Передадим объект опций:
+      { year, imageUrl }, // Передадим объект опций:
       {
         new: true, // обработчик then получит на вход обновлённую запись
         runValidators: true, // данные будут валидированы перед изменением
@@ -161,20 +162,6 @@ const updateReportData = async (
       next(err);
     }
   }
-};
-
-const updateReportTextData = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { year } = req.body;
-  updateReportData(req, res, next, { year });
-};
-
-const updateReportImage = (req: Request, res: Response, next: NextFunction) => {
-  const { imageUrl } = req.body;
-  updateReportData(req, res, next, { imageUrl });
 };
 
 // Функция, которая удаляет новость по идентификатору
@@ -205,7 +192,6 @@ export {
   getReportByIndex,
   getReportById,
   createReport,
-  updateReportTextData,
-  updateReportImage,
+  updateReport,
   deleteReportById,
 };

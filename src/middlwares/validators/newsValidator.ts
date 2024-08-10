@@ -17,21 +17,6 @@ const newsQueryParamsValidator = celebrate({
   }),
 });
 
-const newsTextDataValidator = celebrate({
-  // валидируем тело запроса
-  body: Joi.object().keys({
-    title: Joi.string().required().min(2).max(60),
-    newsText: Joi.string().required().min(2),
-  }),
-});
-
-const newsImageUrlValidator = celebrate({
-  // валидируем тело запроса
-  body: Joi.object().keys({
-    imageUrl: Joi.string().required(),
-  }),
-});
-
 const newsIdValidator = celebrate({
   // валидируем параметры
   params: Joi.object().keys({
@@ -39,4 +24,4 @@ const newsIdValidator = celebrate({
   }),
 });
 
-export { newsDataValidator, newsQueryParamsValidator, newsTextDataValidator, newsImageUrlValidator, newsIdValidator };
+export { newsDataValidator, newsQueryParamsValidator, newsIdValidator };

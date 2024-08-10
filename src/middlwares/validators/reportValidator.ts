@@ -9,20 +9,6 @@ const reportDataValidator = celebrate({
   }),
 });
 
-const reportTextDataValidator = celebrate({
-  // валидируем тело запроса
-  body: Joi.object().keys({
-    year: Joi.string().required().min(2).max(30),
-  }),
-});
-
-const reportImageUrlValidator = celebrate({
-  // валидируем тело запроса
-  body: Joi.object().keys({
-    imageUrl: Joi.string().required(),
-  }),
-});
-
 const reportIdValidator = celebrate({
   // валидируем параметры
   params: Joi.object().keys({
@@ -37,10 +23,4 @@ const reportIndexValidator = celebrate({
   }),
 });
 
-export {
-  reportDataValidator,
-  reportTextDataValidator,
-  reportImageUrlValidator,
-  reportIdValidator,
-  reportIndexValidator,
-};
+export { reportDataValidator, reportIdValidator, reportIndexValidator };

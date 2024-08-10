@@ -120,15 +120,17 @@ const createArticle = async (
 const updateArticleData = async (
   req: Request,
   res: Response,
-  next: NextFunction,
-  newsData: IArticle
+  next: NextFunction
 ) => {
   try {
     const { articleId } = req.params;
+    const { title, articleText, articleDescription, imageUrl, sourceUrl } =
+      req.body;
+
     // обновим имя найденного по _id пользователя
     const article = await Article.findByIdAndUpdate(
       articleId,
-      newsData, // Передадим объект опций:
+      { title, articleText, articleDescription, imageUrl, sourceUrl }, // Передадим объект опций:
       {
         new: true, // обработчик then получит на вход обновлённую запись
         runValidators: true, // данные будут валидированы перед изменением
@@ -154,29 +156,6 @@ const updateArticleData = async (
       next(err);
     }
   }
-};
-
-const updateArticleTextData = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { title, articleText, articleDescription, sourceUrl } = req.body;
-  updateArticleData(req, res, next, {
-    title,
-    articleText,
-    articleDescription,
-    sourceUrl,
-  });
-};
-
-const updateArticleImage = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { imageUrl } = req.body;
-  updateArticleData(req, res, next, { imageUrl });
 };
 
 // Функция, которая удаляет новость по идентификатору
@@ -206,7 +185,6 @@ export {
   getArticles,
   getArticleById,
   createArticle,
-  updateArticleTextData,
-  updateArticleImage,
+  updateArticleData,
   deleteArticleById,
 };

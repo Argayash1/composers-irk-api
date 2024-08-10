@@ -17,21 +17,6 @@ const projectQueryParamsValidator = celebrate({
   }),
 });
 
-const projectTextDataValidator = celebrate({
-  // валидируем тело запроса
-  body: Joi.object().keys({
-    title: Joi.string().required().min(2).max(30),
-    description: Joi.string().required().min(2),
-  }),
-});
-
-const projectImageUrlValidator = celebrate({
-  // валидируем тело запроса
-  body: Joi.object().keys({
-    imageUrl: Joi.string().required(),
-  }),
-});
-
 const projectIdValidator = celebrate({
   // валидируем параметры
   params: Joi.object().keys({
@@ -39,10 +24,4 @@ const projectIdValidator = celebrate({
   }),
 });
 
-export {
-  projectDataValidator,
-  projectQueryParamsValidator,
-  projectTextDataValidator,
-  projectImageUrlValidator,
-  projectIdValidator,
-};
+export { projectDataValidator, projectQueryParamsValidator, projectIdValidator };

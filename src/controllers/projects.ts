@@ -102,29 +102,30 @@ const createProject = async (
   }
 };
 
-const updateProjectData = async (
+const updateProject = async (
   req: Request,
   res: Response,
   next: NextFunction,
-  projectData: IProject
 ) => {
   try {
     const { projectId } = req.params;
+    const { title, description, imageUrl } = req.body;
+
     // обновим имя найденного по _id пользователя
-    const news = await Project.findByIdAndUpdate(
+    const project = await Project.findByIdAndUpdate(
       projectId,
-      projectData, // Передадим объект опций:
+      { title, description, imageUrl }, // Передадим объект опций:
       {
         new: true, // обработчик then получит на вход обновлённую запись
         runValidators: true, // данные будут валидированы перед изменением
       }
     );
 
-    if (!news) {
+    if (!project) {
       throw new NotFoundError("Такого пользователя нет");
     }
 
-    res.send(news);
+    res.send(project);
   } catch (err) {
     if (err instanceof ValidationError) {
       const errorMessage = Object.values(err.errors)
@@ -139,24 +140,6 @@ const updateProjectData = async (
       next(err);
     }
   }
-};
-
-const updateProjectTextData = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { title, description } = req.body;
-  updateProjectData(req, res, next, { title, description });
-};
-
-const updateProjectImage = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { imageUrl } = req.body;
-  updateProjectData(req, res, next, { imageUrl });
 };
 
 // Функция, которая удаляет новость по идентификатору
@@ -185,8 +168,7 @@ const deleteProjectById = async (
 export {
   getProjects,
   getProjectById,
-  updateProjectTextData,
-  updateProjectImage,
+  updateProject,
   createProject,
   deleteProjectById,
 };

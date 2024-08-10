@@ -93,18 +93,19 @@ const createNews = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const updateNewsData = async (
+const updateNews = async (
   req: Request,
   res: Response,
   next: NextFunction,
-  newsData: INews
 ) => {
   try {
     const { newsId } = req.params;
+    const { title, newsText, imageUrl } = req.body;
+
     // обновим имя найденного по _id пользователя
     const news = await News.findByIdAndUpdate(
       newsId,
-      newsData, // Передадим объект опций:
+      { title, newsText, imageUrl }, // Передадим объект опций:
       {
         new: true, // обработчик then получит на вход обновлённую запись
         runValidators: true, // данные будут валидированы перед изменением
@@ -130,20 +131,6 @@ const updateNewsData = async (
       next(err);
     }
   }
-};
-
-const updateNewsTextData = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { title, newsText } = req.body;
-  updateNewsData(req, res, next, { title, newsText });
-};
-
-const updateNewsImage = (req: Request, res: Response, next: NextFunction) => {
-  const { imageUrl } = req.body;
-  updateNewsData(req, res, next, { imageUrl });
 };
 
 // Функция, которая удаляет новость по идентификатору
@@ -173,7 +160,6 @@ export {
   getNews,
   getNewsById,
   createNews,
-  updateNewsTextData,
-  updateNewsImage,
+  updateNews,
   deleteNewsById,
 };

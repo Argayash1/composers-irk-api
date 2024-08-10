@@ -5,16 +5,13 @@ import {
   getNewsById,
   createNews,
   deleteNewsById,
-  updateNewsTextData,
-  updateNewsImage,
+  updateNews,
 } from '../controllers/news';
 
 import {
   newsDataValidator,
   newsIdValidator,
-  newsImageUrlValidator,
   newsQueryParamsValidator,
-  newsTextDataValidator,
 } from '../middlwares/validators/newsValidator';
 
 const router = Router();
@@ -25,9 +22,7 @@ router.post('/', newsDataValidator, createNews);
 
 router.get('/:newsId', newsIdValidator, getNewsById);
 
-router.patch('/:newsId', newsIdValidator, newsTextDataValidator, updateNewsTextData);
-
-router.patch('/:newsId/image', newsIdValidator, newsImageUrlValidator, updateNewsImage);
+router.patch('/:newsId', newsIdValidator, newsDataValidator, updateNews);
 
 router.delete('/:newsId', newsIdValidator, deleteNewsById);
 

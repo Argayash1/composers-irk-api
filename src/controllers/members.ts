@@ -142,14 +142,15 @@ const updateUnionMemberData = async (
   req: Request,
   res: Response,
   next: NextFunction,
-  memberData: IMember
 ) => {
   try {
     const { memberId } = req.params;
+    const { surname, patronymic, name, profession, imageUrl, biography, shortBiography, works, awards, competitions, links } = req.body;
+
     // обновим имя найденного по _id пользователя
     const news = await Member.findByIdAndUpdate(
       memberId,
-      memberData, // Передадим объект опций:
+      { surname, patronymic, name, profession, biography, imageUrl, shortBiography, works, awards, competitions, links }, // Передадим объект опций:
       {
         new: true, // обработчик then получит на вход обновлённую запись
         runValidators: true, // данные будут валидированы перед изменением
@@ -175,46 +176,6 @@ const updateUnionMemberData = async (
       next(err);
     }
   }
-};
-
-const updateUnionMemberProfile = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { surname, patronymic, name, profession } = req.body;
-  updateUnionMemberData(req, res, next, {
-    surname,
-    patronymic,
-    name,
-    profession,
-  });
-};
-
-const updateUnionMemberAbout = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { biography, shortBiography, works, awards, competitions, links } =
-    req.body;
-  updateUnionMemberData(req, res, next, {
-    biography,
-    shortBiography,
-    works,
-    awards,
-    competitions,
-    links,
-  });
-};
-
-const updateUnionMemberImage = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { imageUrl } = req.body;
-  updateUnionMemberData(req, res, next, { imageUrl });
 };
 
 // Функция, которая удаляет новость по идентификатору
@@ -243,9 +204,7 @@ const deleteUnionMemberById = async (
 export {
   getUnionMembers,
   getUnionMemberById,
-  updateUnionMemberProfile,
-  updateUnionMemberAbout,
-  updateUnionMemberImage,
+  updateUnionMemberData,
   createUnionMember,
   deleteUnionMemberById,
 };

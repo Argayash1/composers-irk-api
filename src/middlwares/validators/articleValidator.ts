@@ -1,5 +1,5 @@
-import { celebrate, Joi } from 'celebrate';
-import { urlRegEx } from '../../utils/constants';
+import { celebrate, Joi } from "celebrate";
+import { urlRegEx } from "../../utils/constants";
 
 const articleDataValidator = celebrate({
   // валидируем тело запроса
@@ -19,23 +19,6 @@ const articleQueryParamsValidator = celebrate({
   }),
 });
 
-const articleTextDataValidator = celebrate({
-  // валидируем тело запроса
-  body: Joi.object().keys({
-    title: Joi.string().required().min(2).max(30),
-    articleText: Joi.string().required().min(2),
-    articleDescription: Joi.string().required().min(2),
-    sourceUrl: Joi.string(),
-  }),
-});
-
-const articleImageUrlValidator = celebrate({
-  // валидируем тело запроса
-  body: Joi.object().keys({
-    imageUrl: Joi.string().required(),
-  }),
-});
-
 const articleIdValidator = celebrate({
   // валидируем параметры
   params: Joi.object().keys({
@@ -46,7 +29,5 @@ const articleIdValidator = celebrate({
 export {
   articleDataValidator,
   articleQueryParamsValidator,
-  articleTextDataValidator,
-  articleImageUrlValidator,
   articleIdValidator,
 };

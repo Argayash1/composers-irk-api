@@ -101,15 +101,16 @@ const createAudio = async (req: Request, res: Response, next: NextFunction) => {
 const updateAudioData = async (
   req: Request,
   res: Response,
-  next: NextFunction,
-  newsData: IAudio
+  next: NextFunction
 ) => {
   try {
     const { audioId } = req.params;
+    const { title, composer, performer, audioUrl } = req.body;
+
     // обновим имя найденного по _id пользователя
     const audio = await Audio.findByIdAndUpdate(
       audioId,
-      newsData, // Передадим объект опций:
+      { title, composer, performer, audioUrl }, // Передадим объект опций:
       {
         new: true, // обработчик then получит на вход обновлённую запись
         runValidators: true, // данные будут валидированы перед изменением
@@ -135,20 +136,6 @@ const updateAudioData = async (
       next(err);
     }
   }
-};
-
-const updateAudioTextData = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { title, composer, performer } = req.body;
-  updateAudioData(req, res, next, { title, composer, performer });
-};
-
-const updateAudioUrl = (req: Request, res: Response, next: NextFunction) => {
-  const { audioUrl } = req.body;
-  updateAudioData(req, res, next, { audioUrl });
 };
 
 // Функция, которая удаляет новость по идентификатору
@@ -178,7 +165,6 @@ export {
   getAudios,
   getAudioById,
   createAudio,
-  updateAudioTextData,
-  updateAudioUrl,
+  updateAudioData,
   deleteAudioById,
 };

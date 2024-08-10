@@ -4,14 +4,11 @@ import {
   getAudios,
   getAudioById,
   createAudio,
-  updateAudioTextData,
-  updateAudioUrl,
+  updateAudioData,
   deleteAudioById,
 } from "../controllers/audios";
 import {
   audioDataValidator,
-  audioTextDataValidator,
-  audioUrlValidator,
   audioIdValidator,
 } from "../middlwares/validators/audioValidator";
 
@@ -26,15 +23,8 @@ router.get("/:audioId", audioIdValidator, getAudioById);
 router.patch(
   "/:audioId",
   audioIdValidator,
-  audioTextDataValidator,
-  updateAudioTextData
-);
-
-router.patch(
-  "/:audioId/link",
-  audioIdValidator,
-  audioUrlValidator,
-  updateAudioUrl
+  audioDataValidator,
+  updateAudioData
 );
 
 router.delete("/:audioId", audioIdValidator, deleteAudioById);
