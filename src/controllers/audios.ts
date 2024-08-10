@@ -8,7 +8,7 @@ import { Error } from "mongoose";
 import NotFoundError from "../errors/NotFoundError"; // импортируем класс ошибок NotFoundError
 import BadRequestError from "../errors/BadRequestError";
 
-// Импорт модели news и её интерфейса
+// Импорт модели audio и её интерфейса
 import Audio from "../models/audio";
 
 // Импорт статус-кодов ошибок
@@ -56,6 +56,7 @@ const getAudios = async (req: Request, res: Response, next: NextFunction) => {
     res.send({
       data: audios,
       totalPages: limit ? Math.ceil(totalAudiosCount / limit) : undefined,
+      total: totalAudiosCount,
     });
   } catch (err) {
     next(err);

@@ -8,7 +8,7 @@ import { Error } from "mongoose";
 import NotFoundError from "../errors/NotFoundError"; // импортируем класс ошибок NotFoundError
 import BadRequestError from "../errors/BadRequestError";
 
-// Импорт модели news и её интерфейса
+// Импорт модели project и её интерфейса
 import Project from "../models/project";
 
 // Импорт статус-кодов ошибок
@@ -56,6 +56,7 @@ const getProjects = async (req: Request, res: Response, next: NextFunction) => {
     res.send({
       data: projects,
       totalPages: limit ? Math.ceil(totalProjectsCount / limit) : undefined,
+      total: totalProjectsCount,
     });
   } catch (err) {
     next(err);

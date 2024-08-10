@@ -8,7 +8,7 @@ import { Error } from "mongoose";
 import NotFoundError from "../errors/NotFoundError"; // импортируем класс ошибок NotFoundError
 import BadRequestError from "../errors/BadRequestError";
 
-// Импорт модели news и её интерфейса
+// Импорт модели member и её интерфейса
 import Member from "../models/member";
 
 // Импорт статус-кодов ошибок
@@ -68,6 +68,7 @@ const getUnionMembers = async (
     res.send({
       data: members,
       totalPages: limit ? Math.ceil(totalMembersCount / limit) : undefined,
+      total: totalMembersCount,
     });
   } catch (err) {
     next(err);

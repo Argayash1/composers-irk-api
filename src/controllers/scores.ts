@@ -8,7 +8,7 @@ import { Error } from "mongoose";
 import NotFoundError from "../errors/NotFoundError"; // импортируем класс ошибок NotFoundError
 import BadRequestError from "../errors/BadRequestError";
 
-// Импорт модели news и её интерфейса
+// Импорт модели score и её интерфейса
 import Score from "../models/score";
 
 // Импорт статус-кодов ошибок
@@ -63,6 +63,7 @@ const getScores = async (req: Request, res: Response, next: NextFunction) => {
     res.send({
       data: scores,
       totalPages: limit ? Math.ceil(totalScoresCount / limit) : undefined,
+      total: totalScoresCount,
     });
   } catch (err) {
     next(err);

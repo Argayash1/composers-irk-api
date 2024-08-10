@@ -8,7 +8,7 @@ import { Error } from "mongoose";
 import NotFoundError from "../errors/NotFoundError"; // импортируем класс ошибок NotFoundError
 import BadRequestError from "../errors/BadRequestError";
 
-// Импорт модели news и её интерфейса
+// Импорт модели history и её интерфейса
 import History from "../models/history";
 
 // Импорт статус-кодов ошибок

@@ -8,7 +8,7 @@ import { Error } from "mongoose";
 import NotFoundError from "../errors/NotFoundError"; // импортируем класс ошибок NotFoundError
 import BadRequestError from "../errors/BadRequestError";
 
-// Импорт модели news и её интерфейса
+// Импорт модели video и её интерфейса
 import Video from "../models/video";
 
 // Импорт статус-кодов ошибок
@@ -57,6 +57,7 @@ const getVideos = async (req: Request, res: Response, next: NextFunction) => {
     res.send({
       data: videos,
       totalPages: limit ? Math.ceil(totalVideosCount / limit) : undefined,
+      total: totalVideosCount,
     });
   } catch (err) {
     next(err);
