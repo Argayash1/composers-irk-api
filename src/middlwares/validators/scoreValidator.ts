@@ -11,6 +11,16 @@ const scoreDataValidator = celebrate({
   }),
 });
 
+const scoreQueryParamsValidator = celebrate({
+  query: Joi.object().keys({
+    page: Joi.number().integer().min(1),
+    limit: Joi.number().integer().min(1).max(100),
+    sortBy: Joi.string().valid('_id', 'url', 'composer', 'title', 'category'),
+    order: Joi.string().valid('asc', 'desc'),
+  }),
+});
+
+
 const scoreIdValidator = celebrate({
   // валидируем параметры
   params: Joi.object().keys({
@@ -18,4 +28,4 @@ const scoreIdValidator = celebrate({
   }),
 });
 
-export { scoreDataValidator, scoreIdValidator };
+export { scoreDataValidator, scoreQueryParamsValidator, scoreIdValidator };

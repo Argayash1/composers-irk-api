@@ -11,6 +11,15 @@ const audioDataValidator = celebrate({
   }),
 });
 
+const audioQueryParamsValidator = celebrate({
+  query: Joi.object().keys({
+    page: Joi.number().integer().min(1),
+    limit: Joi.number().integer().min(1).max(100),
+    sortBy: Joi.string().valid('_id', 'audioUrl', 'composer', 'title', 'performer'),
+    order: Joi.string().valid('asc', 'desc'),
+  }),
+});
+
 const audioIdValidator = celebrate({
   // валидируем параметры
   params: Joi.object().keys({
@@ -18,4 +27,4 @@ const audioIdValidator = celebrate({
   }),
 });
 
-export { audioDataValidator, audioIdValidator };
+export { audioDataValidator, audioQueryParamsValidator, audioIdValidator };

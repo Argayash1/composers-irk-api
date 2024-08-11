@@ -27,9 +27,10 @@ const { ValidationError, CastError } = Error;
 const getProjects = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const page = req.query.page ? Number(req.query.page as string) : undefined;
-    const limit = req.query.limit
-      ? Number(req.query.limit as string)
-      : undefined;
+    const limit = req.query.limit ? Number(req.query.limit as string) : undefined;
+    const sortBy = req.query.sortBy ? req.query.sortBy as string : undefined;
+    const sortOrder = req.query.sortOrder === 'desc' ? -1 : 1;
+
 
     if (Number.isNaN(page) || Number.isNaN(limit)) {
       throw new BadRequestError(BAD_REQUEST_INCORRECT_PARAMS_ERROR_MESSAGE);
@@ -40,6 +41,10 @@ const getProjects = async (req: Request, res: Response, next: NextFunction) => {
     const totalProjectsCount = await Project.countDocuments();
 
     let projectsQuery = Project.find();
+
+    if (sortBy) {
+      projectsQuery = projectsQuery.sort({ [sortBy]: sortOrder });
+    }
 
     if (page && limit) {
       projectsQuery = projectsQuery.skip(skip).limit(limit);

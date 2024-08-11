@@ -16,6 +16,16 @@ const reportIdValidator = celebrate({
   }),
 });
 
+const reportQueryParamsValidator = celebrate({
+  query: Joi.object().keys({
+    page: Joi.number().integer().min(1),
+    limit: Joi.number().integer().min(1).max(100),
+    sortBy: Joi.string().valid('_id', 'imageUrl', 'createdAt', 'title', 'newsText'),
+    order: Joi.string().valid('asc', 'desc'),
+  }),
+});
+
+
 const reportIndexValidator = celebrate({
   // валидируем параметры
   params: Joi.object().keys({
@@ -23,4 +33,4 @@ const reportIndexValidator = celebrate({
   }),
 });
 
-export { reportDataValidator, reportIdValidator, reportIndexValidator };
+export { reportDataValidator, reportIdValidator, reportQueryParamsValidator, reportIndexValidator };

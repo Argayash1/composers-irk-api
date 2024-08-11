@@ -27,9 +27,10 @@ const getScores = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const category = req.query.category || null;
     const page = req.query.page ? Number(req.query.page as string) : undefined;
-    const limit = req.query.limit
-      ? Number(req.query.limit as string)
-      : undefined;
+    const limit = req.query.limit ? Number(req.query.limit as string) : undefined;
+    const sortBy = req.query.sortBy ? req.query.sortBy as string : undefined;
+    const sortOrder = req.query.sortOrder === 'desc' ? -1 : 1;
+
 
     if (Number.isNaN(page) || Number.isNaN(limit) || Number.isNaN(category)) {
       throw new BadRequestError(BAD_REQUEST_INCORRECT_PARAMS_ERROR_MESSAGE);
@@ -46,6 +47,10 @@ const getScores = async (req: Request, res: Response, next: NextFunction) => {
     const totalScoresCount = await Score.countDocuments(query);
 
     let scoresQuery = Score.find(query);
+
+    if (sortBy) {
+      scoresQuery = scoresQuery.sort({ [sortBy]: sortOrder });
+    }
 
     if (page && limit) {
       scoresQuery = scoresQuery.skip(skip).limit(limit);

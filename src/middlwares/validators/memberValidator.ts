@@ -23,6 +23,8 @@ const memberQueryParamsValidator = celebrate({
   query: Joi.object().keys({
     page: Joi.number().integer().min(1),
     limit: Joi.number().integer().min(1).max(100),
+    sortBy: Joi.string().valid('_id', 'imageUrl', 'surname', 'patronymic', 'name', 'profession', 'biography', 'shortBiography', 'works', 'competitions', 'awards'),
+    order: Joi.string().valid('asc', 'desc'),
   }),
 });
 

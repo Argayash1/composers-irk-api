@@ -12,12 +12,13 @@ import {
 import {
   reportDataValidator,
   reportIdValidator,
+  reportQueryParamsValidator,
   reportIndexValidator,
 } from "../middlwares/validators/reportValidator";
 
 const router = Router();
 
-router.get("/", getReports);
+router.get("/", reportQueryParamsValidator, getReports);
 
 router.post("/", reportDataValidator, createReport);
 

@@ -9,23 +9,19 @@ import {
 } from "../controllers/audios";
 import {
   audioDataValidator,
+  audioQueryParamsValidator,
   audioIdValidator,
 } from "../middlwares/validators/audioValidator";
 
 const router = Router();
 
-router.get("/", getAudios);
+router.get("/", audioQueryParamsValidator, getAudios);
 
 router.post("/", audioDataValidator, createAudio);
 
 router.get("/:audioId", audioIdValidator, getAudioById);
 
-router.patch(
-  "/:audioId",
-  audioIdValidator,
-  audioDataValidator,
-  updateAudioData
-);
+router.patch("/:audioId", audioIdValidator, audioDataValidator, updateAudioData);
 
 router.delete("/:audioId", audioIdValidator, deleteAudioById);
 

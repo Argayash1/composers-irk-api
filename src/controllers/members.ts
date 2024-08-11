@@ -31,9 +31,10 @@ const getUnionMembers = async (
 ) => {
   try {
     const page = req.query.page ? Number(req.query.page as string) : undefined;
-    const limit = req.query.limit
-      ? Number(req.query.limit as string)
-      : undefined;
+    const limit = req.query.limit ? Number(req.query.limit as string) : undefined;
+    const sortBy = req.query.sortBy ? req.query.sortBy as string : undefined;
+    const sortOrder = req.query.sortOrder === 'desc' ? -1 : 1;
+
 
     if (Number.isNaN(page) || Number.isNaN(limit)) {
       throw new BadRequestError(BAD_REQUEST_INCORRECT_PARAMS_ERROR_MESSAGE);
@@ -43,7 +44,12 @@ const getUnionMembers = async (
 
     const totalMembersCount = await Member.countDocuments();
 
-    let membersQuery = Member.find().sort({ surname: 1 });
+    let membersQuery = Member.find();
+
+    if (sortBy) {
+      membersQuery = membersQuery.sort({ [sortBy]: sortOrder });
+    }
+
 
     if (page && limit) {
       membersQuery = membersQuery.skip(skip).limit(limit);
