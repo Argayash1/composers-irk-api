@@ -23,14 +23,6 @@ import {
 
 const { ValidationError, CastError } = Error;
 
-interface IVideo {
-  composer?: string;
-  title?: string;
-  performer?: string;
-  iframeUrl?: string;
-  about?: string;
-}
-
 const getVideos = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const page = req.query.page ? Number(req.query.page as string) : undefined;
@@ -64,11 +56,7 @@ const getVideos = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const getVideoById = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const getVideoById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { videoId } = req.params;
     const videos = await Video.findById(videoId);
@@ -105,18 +93,15 @@ const createVideo = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const updateVideoData = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-  newsData: IVideo
-) => {
+const updateVideo = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { videoId } = req.params;
+    const { composer, title, performer, about, iframeUrl } = req.body;
+
     // обновим имя найденного по _id пользователя
     const video = await Video.findByIdAndUpdate(
       videoId,
-      newsData, // Передадим объект опций:
+      { composer, title, performer, about, iframeUrl }, // Передадим объект опций:
       {
         new: true, // обработчик then получит на вход обновлённую запись
         runValidators: true, // данные будут валидированы перед изменением
@@ -144,26 +129,8 @@ const updateVideoData = async (
   }
 };
 
-const updateVideoTextData = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { composer, title, performer, about } = req.body;
-  updateVideoData(req, res, next, { composer, title, performer });
-};
-
-const updateVideoUrl = (req: Request, res: Response, next: NextFunction) => {
-  const { iframeUrl } = req.body;
-  updateVideoData(req, res, next, { iframeUrl });
-};
-
 // Функция, которая удаляет новость по идентификатору
-const deleteVideoById = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const deleteVideoById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { videoId } = req.params;
     const video = await Video.findById(videoId);
@@ -181,11 +148,4 @@ const deleteVideoById = async (
   }
 };
 
-export {
-  getVideos,
-  getVideoById,
-  createVideo,
-  updateVideoTextData,
-  updateVideoUrl,
-  deleteVideoById,
-};
+export { getVideos, getVideoById, createVideo, updateVideo, deleteVideoById };

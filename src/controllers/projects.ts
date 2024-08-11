@@ -23,12 +23,6 @@ import {
 
 const { ValidationError, CastError } = Error;
 
-interface IProject {
-  imageUrl?: string;
-  title?: string;
-  description?: string;
-}
-
 // Функция, которая возвращает все новости
 const getProjects = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -63,11 +57,7 @@ const getProjects = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const getProjectById = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const getProjectById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { projectId } = req.params;
     const projects = await Project.findById(projectId);
@@ -81,11 +71,7 @@ const getProjectById = async (
   }
 };
 
-const createProject = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const createProject = async (req: Request, res: Response, next: NextFunction) => {
   const { imageUrl, title, description } = req.body;
   try {
     const news = await Project.create({ imageUrl, title, description });
@@ -102,11 +88,7 @@ const createProject = async (
   }
 };
 
-const updateProject = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+const updateProject = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { projectId } = req.params;
     const { title, description, imageUrl } = req.body;
@@ -143,11 +125,7 @@ const updateProject = async (
 };
 
 // Функция, которая удаляет новость по идентификатору
-const deleteProjectById = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const deleteProjectById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { projectId } = req.params;
     const news = await Project.findById(projectId);
@@ -165,10 +143,4 @@ const deleteProjectById = async (
   }
 };
 
-export {
-  getProjects,
-  getProjectById,
-  updateProject,
-  createProject,
-  deleteProjectById,
-};
+export { getProjects, getProjectById, updateProject, createProject, deleteProjectById };

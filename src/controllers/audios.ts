@@ -23,13 +23,6 @@ import {
 
 const { ValidationError, CastError } = Error;
 
-interface IAudio {
-  composer?: string;
-  title?: string;
-  performer?: string;
-  audioUrl?: string;
-}
-
 const getAudios = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const page = req.query.page ? Number(req.query.page as string) : undefined;

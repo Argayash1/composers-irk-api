@@ -4,16 +4,13 @@ import {
   getVideos,
   getVideoById,
   createVideo,
-  updateVideoTextData,
-  updateVideoUrl,
+  updateVideo,
   deleteVideoById,
 } from '../controllers/videos';
 
 import {
   videoDataValidator,
   videoQueryParamsValidator,
-  videoTextDataValidator,
-  videoImageUrlValidator,
   videoIdValidator,
 } from '../middlwares/validators/videoValidator';
 
@@ -25,9 +22,7 @@ router.post('/', videoDataValidator, createVideo);
 
 router.get('/:videoId', videoIdValidator, getVideoById);
 
-router.patch('/:videoId', videoIdValidator, videoTextDataValidator, updateVideoTextData);
-
-router.patch('/:videoId/link', videoIdValidator, videoImageUrlValidator, updateVideoUrl);
+router.patch('/:videoId', videoIdValidator, videoDataValidator, updateVideo);
 
 router.delete('/:videoId', videoIdValidator, deleteVideoById);
 

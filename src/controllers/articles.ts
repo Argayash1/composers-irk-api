@@ -23,14 +23,6 @@ import {
 
 const { ValidationError, CastError } = Error;
 
-interface IArticle {
-  imageUrl?: string;
-  title?: string;
-  articleDescription?: string;
-  articleText?: string;
-  sourceUrl?: string;
-}
-
 const getArticles = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const page = req.query.page ? Number(req.query.page as string) : undefined;

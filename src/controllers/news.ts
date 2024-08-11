@@ -23,12 +23,6 @@ import {
 
 const { ValidationError, CastError } = Error;
 
-interface INews {
-  imageUrl?: string;
-  title?: string;
-  newsText?: string;
-}
-
 const getNews = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const page = req.query.page ? Number(req.query.page as string) : undefined;
@@ -156,10 +150,4 @@ const deleteNewsById = async (
   }
 };
 
-export {
-  getNews,
-  getNewsById,
-  createNews,
-  updateNews,
-  deleteNewsById,
-};
+export { getNews, getNewsById, createNews, updateNews, deleteNewsById };

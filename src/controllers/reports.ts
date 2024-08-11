@@ -24,12 +24,6 @@ import {
 
 const { ValidationError, CastError } = Error;
 
-interface IReport {
-  year?: string;
-  imageUrl?: string;
-  altText?: string;
-}
-
 const getReports = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const page = req.query.page ? Number(req.query.page as string) : undefined;
@@ -63,11 +57,7 @@ const getReports = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const getReportByIndex = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const getReportByIndex = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const reports = await Report.find({});
     const reportIndex = parseInt(req.params.reportIndex); // Извлечение reportIndex из URL-адреса и преобразование в число
@@ -85,11 +75,7 @@ const getReportByIndex = async (
   }
 };
 
-const getReportById = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const getReportById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { reportId } = req.params;
     const report = await Report.findById(reportId);
@@ -103,12 +89,9 @@ const getReportById = async (
   }
 };
 
-const createReport = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const createReport = async (req: Request, res: Response, next: NextFunction) => {
   const { year, imageUrl } = req.body;
+
   try {
     const report = await Report.create({ year, imageUrl });
     res.status(CREATED_201).send(report);
@@ -124,11 +107,7 @@ const createReport = async (
   }
 };
 
-const updateReport = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+const updateReport = async (req: Request, res: Response, next: NextFunction,) => {
   try {
     const { reportId } = req.params;
     const { year, imageUrl } = req.body;
@@ -165,11 +144,7 @@ const updateReport = async (
 };
 
 // Функция, которая удаляет новость по идентификатору
-const deleteReportById = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const deleteReportById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { reportId } = req.params;
     const report = await Report.findById(reportId);

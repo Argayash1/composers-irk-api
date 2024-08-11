@@ -23,20 +23,6 @@ import {
 
 const { ValidationError, CastError } = Error;
 
-interface IMember {
-  imageUrl?: string;
-  surname?: string;
-  patronymic?: string;
-  name?: string;
-  profession?: string;
-  biography?: string;
-  shortBiography?: string;
-  works?: string;
-  competitions?: string;
-  awards?: string;
-  links?: string;
-}
-
 // Функция, которая возвращает все новости
 const getUnionMembers = async (
   req: Request,

@@ -11,22 +11,6 @@ const scoreDataValidator = celebrate({
   }),
 });
 
-const scoreTextDataValidator = celebrate({
-  // валидируем тело запроса
-  body: Joi.object().keys({
-    composer: Joi.string().required().min(2).max(30),
-    title: Joi.string().required().min(2).max(60),
-    category: Joi.string().required().max(10),
-  }),
-});
-
-const scoreUrlValidator = celebrate({
-  // валидируем тело запроса
-  body: Joi.object().keys({
-    url: Joi.string().required(),
-  }),
-});
-
 const scoreIdValidator = celebrate({
   // валидируем параметры
   params: Joi.object().keys({
@@ -34,4 +18,4 @@ const scoreIdValidator = celebrate({
   }),
 });
 
-export { scoreDataValidator, scoreTextDataValidator, scoreUrlValidator, scoreIdValidator };
+export { scoreDataValidator, scoreIdValidator };

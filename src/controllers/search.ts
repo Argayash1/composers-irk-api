@@ -14,17 +14,11 @@ import Video from "../models/video";
 import BadRequestError from "../errors/BadRequestError";
 import { BAD_REQUEST_INCORRECT_PARAMS_ERROR_MESSAGE } from "../utils/constants";
 
-const getSearchResults = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const getSearchResults = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const searchQuery = req.query.q;
     const page = req.query.page ? Number(req.query.page as string) : undefined;
-    const limit = req.query.limit
-      ? Number(req.query.limit as string)
-      : undefined;
+    const limit = req.query.limit ? Number(req.query.limit as string) : undefined;
 
     if (Number.isNaN(page) || Number.isNaN(limit)) {
       throw new BadRequestError(BAD_REQUEST_INCORRECT_PARAMS_ERROR_MESSAGE);

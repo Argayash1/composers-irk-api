@@ -23,13 +23,6 @@ import {
 
 const { ValidationError, CastError } = Error;
 
-interface IAudio {
-  composer?: string;
-  title?: string;
-  category?: string;
-  url?: string;
-}
-
 const getScores = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const category = req.query.category || null;
@@ -105,18 +98,15 @@ const createScore = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const updateScoreData = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-  newsData: IAudio
-) => {
+const updateScore = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { scoreId } = req.params;
+    const { title, composer, category, url } = req.body;
+
     // обновим имя найденного по _id пользователя
     const score = await Score.findByIdAndUpdate(
       scoreId,
-      newsData, // Передадим объект опций:
+      { title, composer, category, url }, // Передадим объект опций:
       {
         new: true, // обработчик then получит на вход обновлённую запись
         runValidators: true, // данные будут валидированы перед изменением
@@ -144,21 +134,7 @@ const updateScoreData = async (
   }
 };
 
-const updateScoreTextData = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { title, composer, category } = req.body;
-  updateScoreData(req, res, next, { title, composer, category });
-};
-
-const updateScoreUrl = (req: Request, res: Response, next: NextFunction) => {
-  const { url } = req.body;
-  updateScoreData(req, res, next, { url });
-};
-
-// Функция, которая удаляет новость по идентификатору
+// Функция, которая удаляет ноns по идентификатору
 const deleteScoreById = async (
   req: Request,
   res: Response,
@@ -181,11 +157,4 @@ const deleteScoreById = async (
   }
 };
 
-export {
-  getScores,
-  getScoreById,
-  createScore,
-  updateScoreTextData,
-  updateScoreUrl,
-  deleteScoreById,
-};
+export { getScores, getScoreById, createScore, updateScore, deleteScoreById };

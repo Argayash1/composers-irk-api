@@ -19,23 +19,6 @@ const videoQueryParamsValidator = celebrate({
   }),
 });
 
-const videoTextDataValidator = celebrate({
-  // валидируем тело запроса
-  body: Joi.object().keys({
-    composer: Joi.string().required().min(2).max(30),
-    title: Joi.string().required().min(2).max(100),
-    performer: Joi.string().min(2).max(30),
-    about: Joi.string().min(2),
-  }),
-});
-
-const videoImageUrlValidator = celebrate({
-  // валидируем тело запроса
-  body: Joi.object().keys({
-    iframeUrl: Joi.string().required(),
-  }),
-});
-
 const videoIdValidator = celebrate({
   // валидируем параметры
   params: Joi.object().keys({
@@ -43,10 +26,4 @@ const videoIdValidator = celebrate({
   }),
 });
 
-export {
-  videoDataValidator,
-  videoQueryParamsValidator,
-  videoTextDataValidator,
-  videoImageUrlValidator,
-  videoIdValidator,
-};
+export { videoDataValidator, videoQueryParamsValidator, videoIdValidator };

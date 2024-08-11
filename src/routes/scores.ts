@@ -4,17 +4,11 @@ import {
   getScores,
   getScoreById,
   createScore,
-  updateScoreTextData,
-  updateScoreUrl,
+  updateScore,
   deleteScoreById,
 } from "../controllers/scores";
 
-import {
-  scoreDataValidator,
-  scoreTextDataValidator,
-  scoreUrlValidator,
-  scoreIdValidator,
-} from "../middlwares/validators/scoreValidator";
+import { scoreDataValidator, scoreIdValidator } from "../middlwares/validators/scoreValidator";
 
 const router = Router();
 
@@ -24,19 +18,7 @@ router.post("/", scoreDataValidator, createScore);
 
 router.get("/:scoreId", scoreIdValidator, getScoreById);
 
-router.patch(
-  "/:scoreId",
-  scoreIdValidator,
-  scoreTextDataValidator,
-  updateScoreTextData
-);
-
-router.patch(
-  "/:scoreId/link",
-  scoreIdValidator,
-  scoreUrlValidator,
-  updateScoreUrl
-);
+router.patch("/:scoreId", scoreIdValidator, scoreDataValidator, updateScore);
 
 router.delete("/:scoreId", scoreIdValidator, deleteScoreById);
 
