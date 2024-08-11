@@ -20,7 +20,7 @@ const reportQueryParamsValidator = celebrate({
   query: Joi.object().keys({
     page: Joi.number().integer().min(1),
     limit: Joi.number().integer().min(1).max(100),
-    sortBy: Joi.string().valid('_id', 'imageUrl', 'createdAt', 'title', 'newsText'),
+    sortBy: Joi.string().valid('_id', 'imageUrl', 'year'),
     order: Joi.string().valid('asc', 'desc'),
   }),
 });
