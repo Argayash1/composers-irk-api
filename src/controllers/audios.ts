@@ -28,7 +28,7 @@ const getAudios = async (req: Request, res: Response, next: NextFunction) => {
     const page = req.query.page ? Number(req.query.page as string) : undefined;
     const limit = req.query.limit ? Number(req.query.limit as string) : undefined;
     const sortBy = req.query.sortBy ? req.query.sortBy as string : undefined;
-    const sortOrder = req.query.sortOrder === 'desc' ? -1 : 1;
+    const order = req.query.sortOrder === 'desc' ? -1 : 1;
 
 
     if (Number.isNaN(page) || Number.isNaN(limit)) {
@@ -42,7 +42,7 @@ const getAudios = async (req: Request, res: Response, next: NextFunction) => {
     let audiosQuery = Audio.find();
 
     if (sortBy) {
-      audiosQuery = audiosQuery.sort({ [sortBy]: sortOrder });
+      audiosQuery = audiosQuery.sort({ [sortBy]: order });
     }
 
     if (page && limit) {

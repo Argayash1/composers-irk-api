@@ -22,11 +22,7 @@ import {
 
 const { ValidationError, CastError } = Error;
 
-const getOurHistory = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const getOurHistory = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const ourHistory = await History.find({});
     const totalOurHistoryCount = await History.countDocuments({});
