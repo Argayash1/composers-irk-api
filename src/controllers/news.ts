@@ -28,7 +28,7 @@ const getNews = async (req: Request, res: Response, next: NextFunction) => {
     const page = req.query.page ? Number(req.query.page as string) : undefined;
     const limit = req.query.limit ? Number(req.query.limit as string) : undefined;
     const sortBy = req.query.sortBy ? req.query.sortBy as string : undefined;
-    const order = req.query.sortOrder === 'desc' ? -1 : 1;
+    const order = req.query.order === 'desc' ? -1 : 1;
 
     if (Number.isNaN(page) || Number.isNaN(limit)) {
       throw new BadRequestError(BAD_REQUEST_INCORRECT_PARAMS_ERROR_MESSAGE);
