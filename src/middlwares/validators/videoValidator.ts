@@ -18,6 +18,8 @@ const videoQueryParamsValidator = celebrate({
     limit: Joi.number().integer().min(1).max(100),
     sortBy: Joi.string().valid('_id', 'iframeUrl', 'composer', 'title', 'about', 'createdAt'),
     order: Joi.string().valid('asc', 'desc'),
+    composer: Joi.string().min(2).max(30),
+    title: Joi.string().min(2).max(100),
   }),
 });
 

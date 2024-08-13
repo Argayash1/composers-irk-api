@@ -38,15 +38,17 @@ const getScores = async (req: Request, res: Response, next: NextFunction) => {
 
     const skip = page && limit ? (page - 1) * limit : 0;
 
-    let query = {};
+    const filters: any = {};
 
-    if (category) {
-      query = { category: category };
+    for (const [key, value] of Object.entries(req.query)) {
+      if (key !== 'page' && key !== 'limit' && key !== 'sortBy' && key !== 'order') {
+        filters[key] = { $regex: value as string, $options: 'i' };
+      }
     }
 
-    const totalScoresCount = await Score.countDocuments(query);
+    const totalScoresCount = await Score.countDocuments(filters);
 
-    let scoresQuery = Score.find(query);
+    let scoresQuery = Score.find(filters);
 
     if (sortBy) {
       scoresQuery = scoresQuery.sort({ [sortBy]: order });

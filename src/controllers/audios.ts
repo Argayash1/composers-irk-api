@@ -37,9 +37,17 @@ const getAudios = async (req: Request, res: Response, next: NextFunction) => {
 
     const skip = page && limit ? (page - 1) * limit : 0;
 
-    const totalAudiosCount = await Audio.countDocuments();
+    const filters: any = {};
 
-    let audiosQuery = Audio.find();
+    for (const [key, value] of Object.entries(req.query)) {
+      if (key !== 'page' && key !== 'limit' && key !== 'sortBy' && key !== 'order') {
+        filters[key] = { $regex: value as string, $options: 'i' };
+      }
+    }
+
+    const totalAudiosCount = await Audio.countDocuments(filters);
+
+    let audiosQuery = Audio.find(filters);
 
     if (sortBy) {
       audiosQuery = audiosQuery.sort({ [sortBy]: order });

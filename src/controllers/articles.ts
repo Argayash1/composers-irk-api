@@ -36,9 +36,18 @@ const getArticles = async (req: Request, res: Response, next: NextFunction) => {
 
     const skip = page && limit ? (page - 1) * limit : 0;
 
-    const totalArticlesCount = await Article.countDocuments();
 
-    let articlesQuery = Article.find();
+    const filters: any = {};
+
+    for (const [key, value] of Object.entries(req.query)) {
+      if (key !== 'page' && key !== 'limit' && key !== 'sortBy' && key !== 'order') {
+        filters[key] = { $regex: value as string, $options: 'i' };
+      }
+    }
+
+    const totalArticlesCount = await Article.countDocuments(filters);
+
+    let articlesQuery = Article.find(filters);
 
     if (sortBy) {
       articlesQuery = articlesQuery.sort({ [sortBy]: order });

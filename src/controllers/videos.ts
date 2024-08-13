@@ -37,9 +37,17 @@ const getVideos = async (req: Request, res: Response, next: NextFunction) => {
 
     const skip = page && limit ? (page - 1) * limit : 0;
 
-    const totalVideosCount = await Video.countDocuments();
+    const filters: any = {};
 
-    let videosQuery = Video.find();
+    for (const [key, value] of Object.entries(req.query)) {
+      if (key !== 'page' && key !== 'limit' && key !== 'sortBy' && key !== 'order') {
+        filters[key] = { $regex: value as string, $options: 'i' };
+      }
+    }
+
+    const totalVideosCount = await Video.countDocuments(filters);
+
+    let videosQuery = Video.find(filters);
 
     if (sortBy) {
       videosQuery = videosQuery.sort({ [sortBy]: order });

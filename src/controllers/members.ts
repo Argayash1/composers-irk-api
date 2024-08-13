@@ -42,9 +42,17 @@ const getUnionMembers = async (
 
     const skip = page && limit ? (page - 1) * limit : 0;
 
-    const totalMembersCount = await Member.countDocuments();
+    const filters: any = {};
 
-    let membersQuery = Member.find();
+    for (const [key, value] of Object.entries(req.query)) {
+      if (key !== 'page' && key !== 'limit' && key !== 'sortBy' && key !== 'order') {
+        filters[key] = { $regex: value as string, $options: 'i' };
+      }
+    }
+
+    const totalMembersCount = await Member.countDocuments(filters);
+
+    let membersQuery = Member.find(filters);
 
     if (sortBy) {
       membersQuery = membersQuery.sort({ [sortBy]: order });

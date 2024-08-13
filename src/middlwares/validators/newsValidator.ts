@@ -16,6 +16,8 @@ const newsQueryParamsValidator = celebrate({
     limit: Joi.number().integer().min(1).max(100),
     sortBy: Joi.string().valid('_id', 'imageUrl', 'createdAt', 'title', 'newsText'),
     order: Joi.string().valid('asc', 'desc'),
+    title: Joi.string().min(1).max(60),
+    newsText: Joi.string().min(2)
   }),
 });
 

@@ -38,9 +38,17 @@ const getProjects = async (req: Request, res: Response, next: NextFunction) => {
 
     const skip = page && limit ? (page - 1) * limit : 0;
 
-    const totalProjectsCount = await Project.countDocuments();
+    const filters: any = {};
 
-    let projectsQuery = Project.find();
+    for (const [key, value] of Object.entries(req.query)) {
+      if (key !== 'page' && key !== 'limit' && key !== 'sortBy' && key !== 'order') {
+        filters[key] = { $regex: value as string, $options: 'i' };
+      }
+    }
+
+    const totalProjectsCount = await Project.countDocuments(filters);
+
+    let projectsQuery = Project.find(filters);
 
     if (sortBy) {
       projectsQuery = projectsQuery.sort({ [sortBy]: order });

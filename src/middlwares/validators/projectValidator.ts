@@ -16,6 +16,8 @@ const projectQueryParamsValidator = celebrate({
     limit: Joi.number().integer().min(1).max(100),
     sortBy: Joi.string().valid('_id', 'imageUrl', 'title', 'description'),
     order: Joi.string().valid('asc', 'desc'),
+    title: Joi.string().min(2).max(30),
+    description: Joi.string().min(2),
   }),
 });
 

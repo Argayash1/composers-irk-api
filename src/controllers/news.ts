@@ -36,9 +36,17 @@ const getNews = async (req: Request, res: Response, next: NextFunction) => {
 
     const skip = page && limit ? (page - 1) * limit : 0;
 
-    const totalNewsCount = await News.countDocuments();
+    const filters: any = {};
 
-    let newsQuery = News.find();
+    for (const [key, value] of Object.entries(req.query)) {
+      if (key !== 'page' && key !== 'limit' && key !== 'sortBy' && key !== 'order') {
+        filters[key] = { $regex: value as string, $options: 'i' };
+      }
+    }
+
+    const totalNewsCount = await News.countDocuments(filters);
+
+    let newsQuery = News.find(filters);
 
     if (sortBy) {
       newsQuery = newsQuery.sort({ [sortBy]: order });

@@ -17,6 +17,9 @@ const scoreQueryParamsValidator = celebrate({
     limit: Joi.number().integer().min(1).max(100),
     sortBy: Joi.string().valid('_id', 'url', 'composer', 'title', 'category'),
     order: Joi.string().valid('asc', 'desc'),
+    composer: Joi.string().required().min(2).max(30),
+    title: Joi.string().min(2).max(60),
+    category: Joi.string().max(10),
   }),
 });
 
