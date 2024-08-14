@@ -12,9 +12,18 @@ const {
 
 const SERVER_ERROR_MESSAGE = 'На сервере произошла ошибка';
 const VALIDATION_ERROR_MESSAGE = 'Некорректные данные:';
+const UNAUTHORIZED_ERROR_MESSAGE = 'С токеном что-то не так';
 const BAD_REQUEST_INCORRECT_PARAMS_ERROR_MESSAGE =
   'Некорректный запрос. Значения параметров page и limit должны быть числом';
 const NOT_FOUND_ERROR_MESSAGE = 'Ресурс не найден. Проверьте URL и метод запроса';
+
+const INCORRECT_USERDATA_MESSAGE = 'Неправильные почта или пароль';
+const CONFLICT_ERROR_MESSAGE = 'Пользователь с таким email уже зарегистрирован';
+const LOGIN_MESSAGE = 'Успешная авторизация';
+const LOGOUT_MESSAGE = 'Вы вышли из системы';
+const USER_NOT_FOUND_ERROR_MESSAGE = 'Такого пользователя нет';
+const CAST_INCORRECT_USERID_ERROR_MESSAGE = 'Некорректный Id пользователя';
+
 
 const NEWS_NOT_FOUND_ERROR_MESSAGE = 'Такой новости нет';
 const DELETE_NEWS_MESSAGE = 'Новость удалена';
@@ -53,6 +62,12 @@ const dateRegex = /^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.\d{4}$/;
 const urlRegEx = /https?:\/\/w{0,3}\.?[\w0-9-]{1,10}\.\w{2,3}[\w\d\-._~:/?#[\]@!$&'()*+,;=]{0,}/m;
 
 export {
+  INCORRECT_USERDATA_MESSAGE,
+  CONFLICT_ERROR_MESSAGE,
+  LOGIN_MESSAGE,
+  LOGOUT_MESSAGE,
+  USER_NOT_FOUND_ERROR_MESSAGE,
+  CAST_INCORRECT_USERID_ERROR_MESSAGE,
   CREATED_201,
   BAD_REQUEST_400,
   UNAUTHORIZED_401,
@@ -61,6 +76,7 @@ export {
   CONFLICT_409,
   INTERNAL_SERVER_ERROR_500,
   SERVER_ERROR_MESSAGE,
+  UNAUTHORIZED_ERROR_MESSAGE,
   VALIDATION_ERROR_MESSAGE,
   BAD_REQUEST_INCORRECT_PARAMS_ERROR_MESSAGE,
   NOT_FOUND_ERROR_MESSAGE,

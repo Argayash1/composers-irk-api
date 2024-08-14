@@ -1,4 +1,5 @@
 import { Router } from 'express'; // импортируем роутер из express
+import users from './users';
 import news from './news';
 import projects from './projects';
 import members from './members';
@@ -12,9 +13,16 @@ import search from './search';
 
 import NotFoundError from '../errors/NotFoundError'; // импортируем класс ошибок NotFoundError
 import { NOT_FOUND_ERROR_MESSAGE } from '../utils/constants';
+import { createUser, login } from '../controllers/users';
+import { createUserValidator, loginValidator } from '../middlwares/validators/userValidator';
 
 const router = Router();
 
+// роуты, не требующие авторизации - регистрация и логин
+router.post('/signup', createUserValidator, createUser); // добавили роутер для регистрации
+router.post('/signin', loginValidator, login); // добавили роутеры для авторизации
+
+router.use('/users', users);
 router.use('/news', news);
 router.use('/projects', projects);
 router.use('/members', members);
