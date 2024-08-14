@@ -90,7 +90,7 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
         sameSite: 'none',
-        secure: true, // указали браузеру посылать куки, только если запрос с того же домена
+        secure: true,
       })
       .send({ message: LOGIN_MESSAGE });
   } catch (err) {

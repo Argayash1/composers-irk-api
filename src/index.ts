@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 // Импорт npm-пакетов
 import express from 'express';
 import mongoose from 'mongoose';
@@ -12,8 +15,9 @@ import { requestLogger, errorLogger } from './middlwares/logger';
 import router from './routes/index';
 import helmet from 'helmet';
 import corsHandler from './middlwares/corsHandler';
+import { DB, DB_DEV, NODE_ENV, PORT } from './utils/config';
 
-const { PORT = 3001 } = process.env;
+// const { PORT = 3001 } = process.env;
 
 const app = express();
 
@@ -21,7 +25,13 @@ const options = {
   useNewUrlParser: true,
 } as mongoose.ConnectOptions;
 
-mongoose.connect('mongodb://127.0.0.1:27017/irkcomposersdb', options);
+// mongoose.connect('mongodb://127.0.0.1:27017/irkcomposersdb', options);
+
+if (NODE_ENV === 'production') {
+  mongoose.connect(DB!, options);
+} else {
+  mongoose.connect(DB_DEV, options);
+}
 
 // Миддлвэр для логирования запросов
 app.use(requestLogger); // подключаем логгер запросов
