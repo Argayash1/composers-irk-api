@@ -6,6 +6,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 
 // Импорт миддлвэров
+import cookieParser from 'cookie-parser';
 import { errors } from 'celebrate';
 import errorHandler from './middlwares/errorHandler';
 import limiter from './middlwares/limiter';
@@ -17,15 +18,11 @@ import helmet from 'helmet';
 import corsHandler from './middlwares/corsHandler';
 import { DB, DB_DEV, NODE_ENV, PORT } from './utils/config';
 
-// const { PORT = 3001 } = process.env;
-
 const app = express();
 
 const options = {
   useNewUrlParser: true,
 } as mongoose.ConnectOptions;
-
-// mongoose.connect('mongodb://127.0.0.1:27017/irkcomposersdb', options);
 
 if (NODE_ENV === 'production') {
   mongoose.connect(DB!, options);
@@ -44,6 +41,7 @@ app.use(corsHandler);
 // Миддлвэры для парсинга
 app.use(express.json()); // для собирания JSON-формата
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser()); // подключаем парсер кук как мидлвэр
 
 // Роутер
 app.use(router);
