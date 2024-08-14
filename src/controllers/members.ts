@@ -2,7 +2,7 @@
 import { Request, Response, NextFunction } from "express";
 
 // Импорт классов ошибок из mongoose.Error
-import { Error } from "mongoose";
+import { Error, Types } from "mongoose";
 
 // Импорт классов ошибок из конструкторов ошибок
 import NotFoundError from "../errors/NotFoundError"; // импортируем класс ошибок NotFoundError
@@ -201,10 +201,40 @@ const deleteUnionMemberById = async (
   }
 };
 
+// Функция, которая удаляет несколько карточек членов Союза по идентификаторам
+const deleteMultipleMembersByIds = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { memberIds } = req.body; // Предполагаем, что идентификаторы передаются в теле запроса как массив
+    if (!Array.isArray(memberIds) || memberIds.length === 0) {
+      throw new BadRequestError("Массив Id карточек членов Союза не является массивом или не содержит элементов.");
+    }
+
+    const validNewsIds = memberIds.map(id => new Types.ObjectId(id)); // Преобразуем строки в ObjectId
+
+    // Проверяем, какие новости существуют
+    const existingNews = await Member.find({ _id: { $in: validNewsIds } });
+    if (existingNews.length !== validNewsIds.length) {
+      throw new NotFoundError("Некоторые из карточек членов Союза не найдены.");
+    }
+
+    // Удаляем новости
+    await Member.deleteMany({ _id: { $in: validNewsIds } });
+    res.send({ message: "Карточки членов Союза успешно удалены" });
+  } catch (err) {
+    if (err instanceof CastError) {
+      next(new BadRequestError("Некоторые из Id карточек членов Союза некорректны"));
+    } else {
+      next(err);
+    }
+  }
+};
+
+
 export {
   getUnionMembers,
   getUnionMemberById,
   updateUnionMemberData,
   createUnionMember,
   deleteUnionMemberById,
+  deleteMultipleMembersByIds,
 };

@@ -31,4 +31,13 @@ const scoreIdValidator = celebrate({
   }),
 });
 
-export { scoreDataValidator, scoreQueryParamsValidator, scoreIdValidator };
+const scoreIdsValidator = celebrate({
+  body: Joi.object().keys({
+    scoreIds: Joi.array()
+      .items(Joi.string().hex().length(24)) // Проверяем, что каждый элемент массива является валидным ObjectId
+      .required()
+  }),
+});
+
+
+export { scoreDataValidator, scoreQueryParamsValidator, scoreIdValidator, scoreIdsValidator };

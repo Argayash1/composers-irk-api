@@ -2,7 +2,7 @@
 import { Request, Response, NextFunction } from "express";
 
 // Импорт классов ошибок из mongoose.Error
-import { Error } from "mongoose";
+import { Error, Types } from "mongoose";
 
 // Импорт классов ошибок из конструкторов ошибок
 import NotFoundError from "../errors/NotFoundError"; // импортируем класс ошибок NotFoundError
@@ -164,4 +164,33 @@ const deleteScoreById = async (
   }
 };
 
-export { getScores, getScoreById, createScore, updateScore, deleteScoreById };
+// Функция, которая удаляет несколько карточек членов Союза по идентификаторам
+const deleteMultipleScoresByIds = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { scoreIds } = req.body; // Предполагаем, что идентификаторы передаются в теле запроса как массив
+    if (!Array.isArray(scoreIds) || scoreIds.length === 0) {
+      throw new BadRequestError("Массив Id нот не является массивом или не содержит элементов.");
+    }
+
+    const validNewsIds = scoreIds.map(id => new Types.ObjectId(id)); // Преобразуем строки в ObjectId
+
+    // Проверяем, какие новости существуют
+    const existingNews = await Score.find({ _id: { $in: validNewsIds } });
+    if (existingNews.length !== validNewsIds.length) {
+      throw new NotFoundError("Некоторые из нот не найдены.");
+    }
+
+    // Удаляем новости
+    await Score.deleteMany({ _id: { $in: validNewsIds } });
+    res.send({ message: "Ноты успешно удалены" });
+  } catch (err) {
+    if (err instanceof CastError) {
+      next(new BadRequestError("Некоторые из Id нот некорректны"));
+    } else {
+      next(err);
+    }
+  }
+};
+
+
+export { getScores, getScoreById, createScore, updateScore, deleteScoreById, deleteMultipleScoresByIds };

@@ -31,8 +31,13 @@ const articleIdValidator = celebrate({
   }),
 });
 
-export {
-  articleDataValidator,
-  articleQueryParamsValidator,
-  articleIdValidator,
-};
+const articleIdsValidator = celebrate({
+  body: Joi.object().keys({
+    articleIds: Joi.array()
+      .items(Joi.string().hex().length(24)) // Проверяем, что каждый элемент массива является валидным ObjectId
+      .required()
+  }),
+});
+
+
+export { articleDataValidator, articleQueryParamsValidator, articleIdValidator, articleIdsValidator };

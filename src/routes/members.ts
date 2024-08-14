@@ -6,6 +6,7 @@ import {
   createUnionMember,
   updateUnionMemberData,
   deleteUnionMemberById,
+  deleteMultipleMembersByIds,
 } from '../controllers/members';
 
 import {
@@ -19,6 +20,8 @@ const router = Router();
 router.get('/', memberQueryParamsValidator, getUnionMembers);
 
 router.post('/', memberDataValidator, createUnionMember);
+
+router.delete('/', deleteMultipleMembersByIds)
 
 router.get('/:memberId', memberIdValidator, getUnionMemberById);
 

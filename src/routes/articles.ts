@@ -6,6 +6,7 @@ import {
   createArticle,
   updateArticleData,
   deleteArticleById,
+  deleteMultipleArticlesByIds
 } from "../controllers/articles";
 
 import {
@@ -20,14 +21,11 @@ router.get("/", articleQueryParamsValidator, getArticles);
 
 router.post("/", articleDataValidator, createArticle);
 
+router.delete('/', deleteMultipleArticlesByIds)
+
 router.get("/:articleId", articleIdValidator, getArticleById);
 
-router.patch(
-  "/:articleId",
-  articleIdValidator,
-  articleDataValidator,
-  updateArticleData
-);
+router.patch("/:articleId", articleIdValidator, articleDataValidator, updateArticleData);
 
 router.delete("/:articleId", articleIdValidator, deleteArticleById);
 

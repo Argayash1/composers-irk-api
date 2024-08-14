@@ -2,7 +2,7 @@
 import { Request, Response, NextFunction } from "express";
 
 // Импорт классов ошибок из mongoose.Error
-import { Error } from "mongoose";
+import { Error, Types } from "mongoose";
 
 // Импорт классов ошибок из конструкторов ошибок
 import NotFoundError from "../errors/NotFoundError"; // импортируем класс ошибок NotFoundError
@@ -167,6 +167,35 @@ const deleteReportById = async (req: Request, res: Response, next: NextFunction)
   }
 };
 
+// Функция, которая удаляет несколько карточек членов Союза по идентификаторам
+const deleteMultipleReportsByIds = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { reportIds } = req.body; // Предполагаем, что идентификаторы передаются в теле запроса как массив
+    if (!Array.isArray(reportIds) || reportIds.length === 0) {
+      throw new BadRequestError("Массив Id отчётов не является массивом или не содержит элементов.");
+    }
+
+    const validNewsIds = reportIds.map(id => new Types.ObjectId(id)); // Преобразуем строки в ObjectId
+
+    // Проверяем, какие новости существуют
+    const existingNews = await Report.find({ _id: { $in: validNewsIds } });
+    if (existingNews.length !== validNewsIds.length) {
+      throw new NotFoundError("Некоторые из отчётов не найдены.");
+    }
+
+    // Удаляем новости
+    await Report.deleteMany({ _id: { $in: validNewsIds } });
+    res.send({ message: "Отчёты успешно удалены" });
+  } catch (err) {
+    if (err instanceof CastError) {
+      next(new BadRequestError("Некоторые из Id отчётов некорректны"));
+    } else {
+      next(err);
+    }
+  }
+};
+
+
 export {
   getReports,
   getReportByIndex,
@@ -174,4 +203,5 @@ export {
   createReport,
   updateReport,
   deleteReportById,
+  deleteMultipleReportsByIds,
 };

@@ -33,4 +33,13 @@ const reportIndexValidator = celebrate({
   }),
 });
 
-export { reportDataValidator, reportIdValidator, reportQueryParamsValidator, reportIndexValidator };
+const reportIdsValidator = celebrate({
+  body: Joi.object().keys({
+    reportIds: Joi.array()
+      .items(Joi.string().hex().length(24)) // Проверяем, что каждый элемент массива является валидным ObjectId
+      .required()
+  }),
+});
+
+
+export { reportDataValidator, reportIdValidator, reportQueryParamsValidator, reportIndexValidator, reportIdsValidator };

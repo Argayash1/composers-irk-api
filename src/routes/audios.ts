@@ -6,6 +6,7 @@ import {
   createAudio,
   updateAudioData,
   deleteAudioById,
+  deleteMultipleAudiosByIds,
 } from "../controllers/audios";
 import {
   audioDataValidator,
@@ -18,6 +19,8 @@ const router = Router();
 router.get("/", audioQueryParamsValidator, getAudios);
 
 router.post("/", audioDataValidator, createAudio);
+
+router.delete('/', deleteMultipleAudiosByIds)
 
 router.get("/:audioId", audioIdValidator, getAudioById);
 

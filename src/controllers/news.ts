@@ -2,7 +2,7 @@
 import { Request, Response, NextFunction } from "express";
 
 // Импорт классов ошибок из mongoose.Error
-import { Error } from "mongoose";
+import { Error, Types } from "mongoose";
 
 // Импорт классов ошибок из конструкторов ошибок
 import NotFoundError from "../errors/NotFoundError"; // импортируем класс ошибок NotFoundError
@@ -99,11 +99,7 @@ const createNews = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const updateNews = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+const updateNews = async (req: Request, res: Response, next: NextFunction,) => {
   try {
     const { newsId } = req.params;
     const { title, newsText, imageUrl } = req.body;
@@ -140,11 +136,7 @@ const updateNews = async (
 };
 
 // Функция, которая удаляет новость по идентификатору
-const deleteNewsById = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const deleteNewsById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { newsId } = req.params;
     const news = await News.findById(newsId);
@@ -162,4 +154,32 @@ const deleteNewsById = async (
   }
 };
 
-export { getNews, getNewsById, createNews, updateNews, deleteNewsById };
+// Функция, которая удаляет несколько новостей по идентификаторам
+const deleteMultipleNewsByIds = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { newsIds } = req.body; // Предполагаем, что идентификаторы передаются в теле запроса как массив
+    if (!Array.isArray(newsIds) || newsIds.length === 0) {
+      throw new BadRequestError("Массив Id новостей не является массивом или не содержит элементов.");
+    }
+
+    const validNewsIds = newsIds.map(id => new Types.ObjectId(id)); // Преобразуем строки в ObjectId
+
+    // Проверяем, какие новости существуют
+    const existingNews = await News.find({ _id: { $in: validNewsIds } });
+    if (existingNews.length !== validNewsIds.length) {
+      throw new NotFoundError("Некоторые из новостей не найдены.");
+    }
+
+    // Удаляем новости
+    await News.deleteMany({ _id: { $in: validNewsIds } });
+    res.send({ message: "Новости успешно удалены" });
+  } catch (err) {
+    if (err instanceof CastError) {
+      next(new BadRequestError("Некоторые из Id новостей некорректны"));
+    } else {
+      next(err);
+    }
+  }
+};
+
+export { getNews, getNewsById, createNews, updateNews, deleteNewsById, deleteMultipleNewsByIds };

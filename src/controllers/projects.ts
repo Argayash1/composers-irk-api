@@ -2,7 +2,7 @@
 import { Request, Response, NextFunction } from "express";
 
 // Импорт классов ошибок из mongoose.Error
-import { Error } from "mongoose";
+import { Error, Types } from "mongoose";
 
 // Импорт классов ошибок из конструкторов ошибок
 import NotFoundError from "../errors/NotFoundError"; // импортируем класс ошибок NotFoundError
@@ -156,4 +156,33 @@ const deleteProjectById = async (req: Request, res: Response, next: NextFunction
   }
 };
 
-export { getProjects, getProjectById, updateProject, createProject, deleteProjectById };
+// Функция, которая удаляет несколько карточек членов Союза по идентификаторам
+const deleteMultipleProjectsByIds = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { projectIds } = req.body; // Предполагаем, что идентификаторы передаются в теле запроса как массив
+    if (!Array.isArray(projectIds) || projectIds.length === 0) {
+      throw new BadRequestError("Массив Id проектов не является массивом или не содержит элементов.");
+    }
+
+    const validNewsIds = projectIds.map(id => new Types.ObjectId(id)); // Преобразуем строки в ObjectId
+
+    // Проверяем, какие новости существуют
+    const existingNews = await Project.find({ _id: { $in: validNewsIds } });
+    if (existingNews.length !== validNewsIds.length) {
+      throw new NotFoundError("Некоторые из проектов не найдены.");
+    }
+
+    // Удаляем новости
+    await Project.deleteMany({ _id: { $in: validNewsIds } });
+    res.send({ message: "Проекты успешно удалены" });
+  } catch (err) {
+    if (err instanceof CastError) {
+      next(new BadRequestError("Некоторые из Id проектов некорректны"));
+    } else {
+      next(err);
+    }
+  }
+};
+
+
+export { getProjects, getProjectById, updateProject, createProject, deleteProjectById, deleteMultipleProjectsByIds };

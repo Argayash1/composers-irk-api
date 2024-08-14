@@ -2,7 +2,7 @@
 import { Request, Response, NextFunction } from "express";
 
 // Импорт классов ошибок из mongoose.Error
-import { Error } from "mongoose";
+import { Error, Types } from "mongoose";
 
 // Импорт классов ошибок из конструкторов ошибок
 import NotFoundError from "../errors/NotFoundError"; // импортируем класс ошибок NotFoundError
@@ -163,7 +163,7 @@ const updateArticleData = async (
   }
 };
 
-// Функция, которая удаляет новость по идентификатору
+// Функция, которая удаляет статью по идентификатору
 const deleteArticleById = async (
   req: Request,
   res: Response,
@@ -186,10 +186,40 @@ const deleteArticleById = async (
   }
 };
 
+// Функция, которая удаляет несколько статей по идентификаторам
+const deleteMultipleArticlesByIds = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { articleIds } = req.body; // Предполагаем, что идентификаторы передаются в теле запроса как массив
+    if (!Array.isArray(articleIds) || articleIds.length === 0) {
+      throw new BadRequestError("Массив Id статей не является массивом или не содержит элементов.");
+    }
+
+    const validNewsIds = articleIds.map(id => new Types.ObjectId(id)); // Преобразуем строки в ObjectId
+
+    // Проверяем, какие новости существуют
+    const existingNews = await Article.find({ _id: { $in: validNewsIds } });
+    if (existingNews.length !== validNewsIds.length) {
+      throw new NotFoundError("Некоторые из статей не найдены.");
+    }
+
+    // Удаляем новости
+    await Article.deleteMany({ _id: { $in: validNewsIds } });
+    res.send({ message: "Статьи успешно удалены" });
+  } catch (err) {
+    if (err instanceof CastError) {
+      next(new BadRequestError("Некоторые из Id статей некорректны"));
+    } else {
+      next(err);
+    }
+  }
+};
+
+
 export {
   getArticles,
   getArticleById,
   createArticle,
   updateArticleData,
   deleteArticleById,
+  deleteMultipleArticlesByIds
 };

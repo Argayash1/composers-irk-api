@@ -30,4 +30,12 @@ const videoIdValidator = celebrate({
   }),
 });
 
-export { videoDataValidator, videoQueryParamsValidator, videoIdValidator };
+const videoIdsValidator = celebrate({
+  body: Joi.object().keys({
+    videoIds: Joi.array()
+      .items(Joi.string().hex().length(24)) // Проверяем, что каждый элемент массива является валидным ObjectId
+      .required()
+  }),
+});
+
+export { videoDataValidator, videoQueryParamsValidator, videoIdValidator, videoIdsValidator };

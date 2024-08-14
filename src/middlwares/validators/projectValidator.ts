@@ -28,4 +28,13 @@ const projectIdValidator = celebrate({
   }),
 });
 
-export { projectDataValidator, projectQueryParamsValidator, projectIdValidator };
+const projectsIdsValidator = celebrate({
+  body: Joi.object().keys({
+    projectIds: Joi.array()
+      .items(Joi.string().hex().length(24)) // Проверяем, что каждый элемент массива является валидным ObjectId
+      .required()
+  }),
+});
+
+
+export { projectDataValidator, projectQueryParamsValidator, projectIdValidator, projectsIdsValidator };

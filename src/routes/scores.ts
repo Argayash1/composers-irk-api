@@ -6,6 +6,7 @@ import {
   createScore,
   updateScore,
   deleteScoreById,
+  deleteMultipleScoresByIds,
 } from "../controllers/scores";
 
 import { scoreDataValidator, scoreIdValidator } from "../middlwares/validators/scoreValidator";
@@ -15,6 +16,8 @@ const router = Router();
 router.get("/", getScores);
 
 router.post("/", scoreDataValidator, createScore);
+
+router.delete('/', deleteMultipleScoresByIds);
 
 router.get("/:scoreId", scoreIdValidator, getScoreById);
 

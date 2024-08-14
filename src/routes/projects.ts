@@ -6,6 +6,7 @@ import {
   createProject,
   updateProject,
   deleteProjectById,
+  deleteMultipleProjectsByIds,
 } from '../controllers/projects';
 
 import {
@@ -19,6 +20,8 @@ const router = Router();
 router.get('/', projectQueryParamsValidator, getProjects);
 
 router.post('/', projectDataValidator, createProject);
+
+router.delete('/', deleteMultipleProjectsByIds);
 
 router.get('/:projectId', projectIdValidator, getProjectById);
 

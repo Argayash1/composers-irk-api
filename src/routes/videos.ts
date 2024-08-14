@@ -6,12 +6,11 @@ import {
   createVideo,
   updateVideo,
   deleteVideoById,
+  deleteMultipleVideosByIds,
 } from '../controllers/videos';
 
 import {
-  videoDataValidator,
-  videoQueryParamsValidator,
-  videoIdValidator,
+  videoDataValidator, videoQueryParamsValidator, videoIdValidator,
 } from '../middlwares/validators/videoValidator';
 
 const router = Router();
@@ -19,6 +18,8 @@ const router = Router();
 router.get('/', videoQueryParamsValidator, getVideos);
 
 router.post('/', videoDataValidator, createVideo);
+
+router.delete('/', deleteMultipleVideosByIds);
 
 router.get('/:videoId', videoIdValidator, getVideoById);
 

@@ -7,6 +7,7 @@ import {
   updateReport,
   deleteReportById,
   getReportByIndex,
+  deleteMultipleReportsByIds,
 } from "../controllers/reports";
 
 import {
@@ -14,6 +15,7 @@ import {
   reportIdValidator,
   reportQueryParamsValidator,
   reportIndexValidator,
+  reportIdsValidator,
 } from "../middlwares/validators/reportValidator";
 
 const router = Router();
@@ -21,6 +23,8 @@ const router = Router();
 router.get("/", reportQueryParamsValidator, getReports);
 
 router.post("/", reportDataValidator, createReport);
+
+router.delete('/', reportIdsValidator, deleteMultipleReportsByIds);
 
 router.get("/:reportId", reportIdValidator, getReportById);
 

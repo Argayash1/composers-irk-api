@@ -5,6 +5,7 @@ import {
   getNewsById,
   createNews,
   deleteNewsById,
+  deleteMultipleNewsByIds,
   updateNews,
 } from '../controllers/news';
 
@@ -19,6 +20,8 @@ const router = Router();
 router.get('/', newsQueryParamsValidator, getNews);
 
 router.post('/', newsDataValidator, createNews);
+
+router.delete('/', deleteMultipleNewsByIds)
 
 router.get('/:newsId', newsIdValidator, getNewsById);
 
