@@ -1,7 +1,7 @@
 import { Schema, model, Document, Model } from 'mongoose';
 import bcrypt from 'bcryptjs';
 import isEmail from 'validator/lib/isEmail';
-import isUrl from 'validator/lib/isUrl';
+import isUrl from 'validator/lib/isURL';
 import UnauthorizedError from '../errors/UnauthorizedError';
 import { INCORRECT_USERDATA_MESSAGE } from '../utils/constants';
 
