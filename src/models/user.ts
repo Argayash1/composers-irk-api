@@ -1,6 +1,7 @@
 import { Schema, model, Document, Model } from 'mongoose';
 import bcrypt from 'bcryptjs';
 import isEmail from 'validator/lib/isEmail';
+import isUrl from 'validator/lib/isUrl';
 import UnauthorizedError from '../errors/UnauthorizedError';
 import { INCORRECT_USERDATA_MESSAGE } from '../utils/constants';
 
@@ -8,6 +9,7 @@ export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
+  avatar: string;
 }
 
 interface IUserModel extends Model<IUser> {
@@ -35,6 +37,17 @@ const userSchema = new Schema<IUser>(
       type: String,
       required: [true, 'не передан пароль пользователя'],
       select: false,
+    },
+    avatar: {
+      type: String, // ссылка — это строка
+      validate: {
+        // validator - функция проверки данных. avatar - значение свойства avatar,
+        // его можно обозначить как угодно, главное, чтобы совпадали обозначения в скобках
+        // если avatar не соответствует формату, вернётся false
+        validator: (avatar: string) => isUrl(avatar, { protocols: ['http', 'https'], require_protocol: true }),
+        message: 'ссылка не соответствует формату', // когда validator вернёт false, будет использовано это сообщение
+      },
+      default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
     },
   },
   { toJSON: { useProjection: true }, toObject: { useProjection: true }, versionKey: false },

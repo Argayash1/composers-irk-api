@@ -50,11 +50,11 @@ const getCurrentUserInfo = async (req: Request, res: Response, next: NextFunctio
 };
 
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, avatar } = req.body;
 
   try {
     const hash = await bcrypt.hash(password, 10);
-    const user = await User.create({ email, password: hash, name });
+    const user = await User.create({ email, password: hash, name, avatar });
 
     res.status(CREATED_201).send({ data: user });
   } catch (err) {
@@ -92,7 +92,7 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
         sameSite: 'none',
         secure: true,
       })
-      .send({ message: LOGIN_MESSAGE });
+      .send({ message: LOGIN_MESSAGE, id: user._id, avatar: user.avatar, fullName: user.name });
   } catch (err) {
     next(err);
   }
