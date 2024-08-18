@@ -15,12 +15,16 @@ import NotFoundError from '../errors/NotFoundError'; // импортируем �
 import { NOT_FOUND_ERROR_MESSAGE } from '../utils/constants';
 import { createUser, login, logout } from '../controllers/users';
 import { createUserValidator, loginValidator } from '../middlwares/validators/userValidator';
+import authenticationMiddleware from '../middlwares/authenticationMiddleware'
 
 const router = Router();
 
 // роуты, не требующие авторизации - регистрация и логин
 router.post('/signup', createUserValidator, createUser); // добавили роутер для регистрации
 router.post('/signin', loginValidator, login); // добавили роутеры для авторизации
+
+// Применяем middleware авторизации ко всем запросам, кроме GET и кроме роута '/users'
+router.use(authenticationMiddleware);
 
 router.use('/users', users);
 router.use('/news', news);
