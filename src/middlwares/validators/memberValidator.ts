@@ -25,10 +25,10 @@ const memberQueryParamsValidator = celebrate({
     limit: Joi.number().integer().min(1).max(100),
     sortBy: Joi.string().valid('_id', 'imageUrl', 'surname', 'patronymic', 'name', 'profession', 'biography', 'shortBiography', 'works', 'competitions', 'awards'),
     order: Joi.string().valid('asc', 'desc'),
-    surname: Joi.string().min(2).max(30),
-    patronymic: Joi.string().min(2).max(30),
-    name: Joi.string().min(2).max(30),
-    profession: Joi.string().min(2).max(30),
+    surname: Joi.string().min(1).max(30),
+    patronymic: Joi.string().min(1).max(30),
+    name: Joi.string().min(1).max(30),
+    profession: Joi.string().min(1).max(30),
   }),
 });
 

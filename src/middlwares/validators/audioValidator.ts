@@ -17,9 +17,9 @@ const audioQueryParamsValidator = celebrate({
     limit: Joi.number().integer().min(1).max(100),
     sortBy: Joi.string().valid('_id', 'audioUrl', 'composer', 'title', 'performer'),
     order: Joi.string().valid('asc', 'desc'),
-    composer: Joi.string().min(2).max(60),
-    title: Joi.string().min(2).max(60),
-    performer: Joi.string().min(2),
+    composer: Joi.string().min(1).max(60),
+    title: Joi.string().min(1).max(60),
+    performer: Joi.string().min(1),
   }),
 });
 
